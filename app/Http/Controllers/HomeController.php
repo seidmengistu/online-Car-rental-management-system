@@ -68,4 +68,44 @@ class HomeController extends Controller
 
         return view('index', compact('cars', 'makes', 'carMakes'));
     }
+
+    /**
+     * Show the about page.
+     */
+    public function about()
+    {
+        return view('home.about-as');
+    }
+
+    /**
+     * Show the FAQ page.
+     */
+    public function faq()
+    {
+        return view('home.faq');
+    }
+
+    /**
+     * Show the gallery page.
+     */
+    public function gallery()
+    {
+        return view('home.gallery');
+    }
+
+    /**
+     * Show the blog page.
+     */
+    public function blog()
+    {
+        return view('home.blog');
+    }
+
+    /**
+     * Show the contact page.
+     */
+    public function contact()
+    {
+        return view('home.contact');
+    }
 } 
