@@ -182,7 +182,7 @@
                             <small class="form-text text-muted">Upload a new image to replace the current one (max 2MB).</small>
                             @if($car->image)
                                 <div class="mt-2">
-                                    <img src="{{ Storage::url($car->image) }}" alt="{{ $car->full_name }}" class="img-thumbnail" style="max-height: 100px;">
+                                    <img src="{{ asset('storage/' . $car->image) }}" alt="{{ $car->full_name }}" class="img-thumbnail" style="max-height: 100px;">
                                 </div>
                             @endif
                             @error('image')

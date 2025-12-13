@@ -1,237 +1,213 @@
 @extends('layouts.main')
 
+@section('head')
+<link href="{{ asset('assets/css/landing.css') }}" rel="stylesheet">
+@endsection
+
 @section('content')
-<!-- Slider Three -->
-<section class="slider style_three">
-    <div class="owl-carousel owl-nav-none owl_dots_none theme_carousel owl-theme"
-       data-options='{"loop": true, "margin": 0, "autoheight":true, "lazyload":true, "nav": true, "dots": true, "autoplay": true, "autoplayTimeout": 7000, "smartSpeed": 1800, "responsive":{ "0" :{ "items": "1" }, "768" :{ "items" : "1" } , "1000":{ "items" : "1" }}}'>
-       <div class="slide-item-content">
-          <div class="slide-item content_left">
-             <div class="image-layer" style="background-image:url(assets/images/sliders/slider-3.jpg)">
-             </div>
-             <div class="container">
-                <div class="slider_content">
-                    <h6 class="animate_up d-inline-block">Car Rental</h6>
-                    <h1 class="animate_left">Luxury Dream <br><span>Cars for Rental</span></h1>
-                    <p class="description animate_right">Embark on a stylish journey without the high cost.<br>Explore our affordable dream car rentals</p>
-                    <div class="button_all animate_down">
-                    <a href="#" target="_blank" rel="nofollow" class="btn-style-four animated">Get in Touch</a>
-                    </div>
-                </div>
-             </div>
-          </div>
-       </div>
-       <div class="slide-item-content">
-          <div class="slide-item content_left">
-             <div class="image-layer" style="background-image:url(assets/images/sliders/slider-3.jpg)">
-             </div>
-             <div class="container">
-                <div class="slider_content">
-                    <h6 class="animate_up d-inline-block">Car Rental</h6>
-                    <h1 class="animate_left">Luxury Dream <br><span>Cars for Rental</span></h1>
-                    <p class="description animate_right">Embark on a stylish journey without the high cost<br>Explore our affordable dream car rentals</p>
-                    <div class="button_all animate_down">
-                    <a href="#" target="_blank" rel="nofollow" class="btn-style-four animated">Get in Touch</a>
-                    </div>
-                </div>
-             </div>
-          </div>
-       </div>
-       <div class="slide-item-content">
-          <div class="slide-item content_left">
-             <div class="image-layer" style="background-image:url(assets/images/sliders/slider-3.jpg)">
-             </div>
-             <div class="container">
-                <div class="slider_content">
-                    <h6 class="animate_up d-inline-block">Car Rental</h6>
-                    <h1 class="animate_left">Luxury Dream <br><span>Cars for Rental</span></h1>
-                    <p class="description animate_right">Embark on a stylish journey without the high cost<br>Explore our affordable dream car rentals</p>
-                    <div class="button_all animate_down">
-                    <a href="#" target="_blank" rel="nofollow" class="btn-style-four animated">Get in Touch</a>
-                    </div>
-                </div>
-             </div>
-          </div>
-       </div>
-    </div>
-</section>
-<!-- Slider Three End -->
-
-<!-- Car Type Section -->
-<section id="car-collection" class="car-type-section pt_120 pb_90 home-three">
-    <div class="container">
-        <div class="section-title centred mb_60">
-            <span class="sub-title">Car Makes</span>
-            <h2 class="title">Explore Our Car Collection</h2>
-        </div>
-        <div class="car-type-outer-box">
-            @foreach($carMakes as $carMake)
-            <div class="car-type-item">
-                <div class="car-image">
-                    @php
-                        $makeImages = [
-                            'Toyota' => 'car-1.png',
-                            'Honda' => 'car-2.png', 
-                            'BMW' => 'car-3.png',
-                            'Tesla' => 'car-4.png',
-                            'Ford' => 'car-5.png',
-                            'Mercedes-Benz' => 'car-6.png',
-                            'Audi' => 'sedan.png',
-                            'Hyundai' => 'hatchback.png',
-                            'Porsche' => 'sports-car.png',
-                            'Volkswagen' => 'suv.png'
-                        ];
-                        $imageFile = $makeImages[$carMake->make] ?? 'car-1.png';
-                    @endphp
-                    <img src="{{ asset('assets/images/car-type/' . $imageFile) }}" alt="{{ $carMake->make }}">
-                    <div class="shape"><img src="{{ asset('assets/images/shape/shape-2.png') }}" alt=""></div>
-                    <div class="car-count">
-                        <span class="count-badge">{{ $carMake->total_count }}</span>
-                    </div>
-                </div>
-                <div class="car-name">
-                    <h6><a href="{{ route('cars.index', ['make' => $carMake->make]) }}">{{ $carMake->make }}</a></h6>
-                    <p class="car-count-text">{{ $carMake->total_count }} {{ Str::plural('car', $carMake->total_count) }} available</p>
-                </div>
-            </div>
-            @endforeach
-        </div>
-    </div>
-</section>
-<!-- Car Type Section End -->
-
-<!-- Divider Section -->
-<section class="divider">
-    <div class="container">
-        <div class="border-divider"></div>
-    </div>
-</section>
-<!-- Divider Section End -->
-
-<!-- Brand Section 2 -->
-<section class="brand-section-2 home-three">
-    <div class="container-fulid">
-        <div class="brand-outer-box-2">
-            <div class="single-brand-item-2">
-                <div class="brand-image">
-                    <img src="assets/images/brands/brand-1.png" alt="">
-                </div>
-            </div>
-            <div class="single-brand-item-2">
-                <div class="brand-image">
-                    <img src="assets/images/brands/brand-2.png" alt="">
-                </div>
-            </div>
-            <div class="single-brand-item-2">
-                <div class="brand-image">
-                    <img src="assets/images/brands/brand-3.png" alt="">
-                </div>
-            </div>
-            <div class="single-brand-item-2">
-                <div class="brand-image">
-                    <img src="assets/images/brands/brand-4.png" alt="">
-                </div>
-            </div>
-            <div class="single-brand-item-2">
-                <div class="brand-image">
-                    <img src="assets/images/brands/brand-5.png" alt="">
-                </div>
-            </div>
-            <div class="single-brand-item-2">
-                <div class="brand-image">
-                    <img src="assets/images/brands/brand-6.png" alt="">
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<!-- Brand Section 2 End -->
-
-<!-- Featured Cars Section -->
-<section id="available-cars" class="featured-cars-section">
+<!-- Hero Section -->
+<section class="hero-landing">
+  <!-- Magical glow orbs -->
+  <div class="hero-glow-1"></div>
+  <div class="hero-glow-2"></div>
+  <div class="hero-glow-3"></div>
+  
+  <div class="owl-carousel hero-slider owl-nav-none owl_dots_none theme_carousel owl-theme"
+    data-options='{"loop": true, "margin": 0, "autoheight":true, "lazyload":true, "nav": false, "dots": false, "autoplay": true, "autoplayTimeout": 7000, "smartSpeed": 1800, "responsive":{ "0" :{ "items": "1" }, "768" :{ "items" : "1" } , "1000":{ "items" : "1" }}}'>
+    <div class="hero-slide" style="background-image:url({{ asset('assets/images/sliders/slider-3.jpg') }})"></div>
+    <div class="hero-slide" style="background-image:url({{ asset('assets/images/sliders/slider-3.jpg') }})"></div>
+    <div class="hero-slide" style="background-image:url({{ asset('assets/images/sliders/slider-3.jpg') }})"></div>
+  </div>
+  
   <div class="container">
-    <div class="row">
-      <div class="col-lg-12">
-        <div class="section-title text-center">
-          <h2>Available Cars</h2>
-          <p>Choose from our selection of quality vehicles</p>
-        </div>
+    <div class="hero-content">
+      <h1 class="hero-title">
+        Drive Your <span>Dream Car</span><br>Today
+      </h1>
+      <p class="hero-description">
+        Experience luxury without the luxury price tag. Choose from our curated collection of premium vehicles for your next adventure.
+      </p>
+      <div class="hero-actions">
+        <a href="#available-cars" class="btn-hero-primary">
+          <i class="fas fa-car"></i>
+          Explore Cars
+        </a>
+        <a href="#car-collection" class="btn-hero-secondary">
+          <i class="fas fa-th-large"></i>
+          Browse Collection
+        </a>
       </div>
     </div>
     
+    <div class="hero-stats d-none d-lg-flex">
+      <div class="stat-item">
+        <div class="stat-number">{{ $cars->count() }}+</div>
+        <div class="stat-label">Available Cars</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">{{ $carMakes->count() }}</div>
+        <div class="stat-label">Car Brands</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">24/7</div>
+        <div class="stat-label">Support</div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="scroll-indicator">
+    <a href="#car-collection">
+      <span>Scroll Down</span>
+      <i class="fas fa-chevron-down"></i>
+    </a>
+  </div>
+</section>
+<!-- Hero Section End -->
+
+<!-- Car Collection Section -->
+<section id="car-collection" class="collection-section">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">
+        <i class="fas fa-layer-group"></i>
+        Our Collection
+      </div>
+      <h2 class="section-title">Explore By Brand</h2>
+      <p class="section-subtitle">Find your perfect ride from our diverse range of premium car manufacturers</p>
+    </div>
+    
+    <div class="collection-grid">
+      @foreach($carMakes as $carMake)
+      <div class="collection-card wow fadeInUp" data-wow-delay="{{ $loop->index * 0.1 }}s">
+        <div class="collection-card-image">
+          @php
+            $makeImages = [
+              'Toyota' => 'car-1.png',
+              'Honda' => 'car-2.png', 
+              'BMW' => 'car-3.png',
+              'Tesla' => 'car-4.png',
+              'Ford' => 'car-5.png',
+              'Mercedes-Benz' => 'car-6.png',
+              'Audi' => 'sedan.png',
+              'Hyundai' => 'hatchback.png',
+              'Porsche' => 'sports-car.png',
+              'Volkswagen' => 'suv.png'
+            ];
+            $imageFile = $makeImages[$carMake->make] ?? 'car-1.png';
+          @endphp
+          <img src="{{ asset('assets/images/car-type/' . $imageFile) }}" alt="{{ $carMake->make }}">
+          <div class="collection-count">{{ $carMake->total_count }}</div>
+        </div>
+        <h6><a href="{{ route('cars.index', ['make' => $carMake->make]) }}">{{ $carMake->make }}</a></h6>
+        <p>{{ $carMake->total_count }} {{ Str::plural('car', $carMake->total_count) }}</p>
+      </div>
+      @endforeach
+    </div>
+  </div>
+</section>
+<!-- Car Collection Section End -->
+
+<!-- Brands Section -->
+<section class="brands-section">
+  <div class="brands-track">
+    <div class="brand-item"><img src="{{ asset('assets/images/brands/brand-1.png') }}" alt="Brand"></div>
+    <div class="brand-item"><img src="{{ asset('assets/images/brands/brand-2.png') }}" alt="Brand"></div>
+    <div class="brand-item"><img src="{{ asset('assets/images/brands/brand-3.png') }}" alt="Brand"></div>
+    <div class="brand-item"><img src="{{ asset('assets/images/brands/brand-4.png') }}" alt="Brand"></div>
+    <div class="brand-item"><img src="{{ asset('assets/images/brands/brand-5.png') }}" alt="Brand"></div>
+    <div class="brand-item"><img src="{{ asset('assets/images/brands/brand-6.png') }}" alt="Brand"></div>
+    <!-- Duplicate for seamless loop -->
+    <div class="brand-item"><img src="{{ asset('assets/images/brands/brand-1.png') }}" alt="Brand"></div>
+    <div class="brand-item"><img src="{{ asset('assets/images/brands/brand-2.png') }}" alt="Brand"></div>
+    <div class="brand-item"><img src="{{ asset('assets/images/brands/brand-3.png') }}" alt="Brand"></div>
+    <div class="brand-item"><img src="{{ asset('assets/images/brands/brand-4.png') }}" alt="Brand"></div>
+    <div class="brand-item"><img src="{{ asset('assets/images/brands/brand-5.png') }}" alt="Brand"></div>
+    <div class="brand-item"><img src="{{ asset('assets/images/brands/brand-6.png') }}" alt="Brand"></div>
+  </div>
+</section>
+<!-- Brands Section End -->
+
+<!-- Available Cars Section -->
+<section id="available-cars" class="cars-section">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">
+        <i class="fas fa-fire"></i>
+        Featured Vehicles
+      </div>
+      <h2 class="section-title">Available Cars</h2>
+      <p class="section-subtitle">Choose from our selection of quality vehicles ready for your next journey</p>
+    </div>
+    
     @if($cars->count() > 0)
-    <div class="row">
+    <div class="cars-grid">
       @foreach($cars as $car)
-      <div class="col-lg-4 col-md-6 mb-4">
-        <div class="featured-car-item">
-          <div class="car-image">
-            @if($car->image)
-              <img src="{{ Storage::url($car->image) }}" alt="{{ $car->full_name }}" class="img-fluid">
-            @else
-              <div class="no-image-placeholder">
-                <i class="fas fa-car fa-3x"></i>
-              </div>
-            @endif
-            <div class="car-price">
-              <span>${{ number_format($car->daily_rate, 2) }}</span>
-              <small>/day</small>
+      <div class="car-card wow fadeInUp" data-wow-delay="{{ ($loop->index % 3) * 0.1 }}s">
+        <div class="car-card-image">
+          @if($car->image)
+            <img src="{{ asset('storage/' . $car->image) }}" alt="{{ $car->full_name }}">
+          @else
+            <div class="no-image-placeholder">
+              <i class="fas fa-car"></i>
+              <span>No image</span>
             </div>
+          @endif
+          <div class="car-price-badge">
+            <span>${{ number_format($car->daily_rate, 2) }}</span>
+            <small>/day</small>
           </div>
-          <div class="car-details">
-            <h4>{{ $car->full_name }}</h4>
-            <p class="car-info">
-              <span><i class="fas fa-palette"></i> {{ $car->color }}</span>
-              <span><i class="fas fa-users"></i> {{ $car->seats }} seats</span>
-              <span><i class="fas fa-gas-pump"></i> {{ ucfirst($car->fuel_type) }}</span>
-              <span><i class="fas fa-cog"></i> {{ ucfirst($car->transmission) }}</span>
-            </p>
-            <p class="car-description">{{ Str::limit($car->description, 100) }}</p>
-            <div class="car-actions">
-              <button type="button" class="btn btn-outline-primary btn-sm" onclick="showCarDetails({{ $car->id }}, '{{ $car->full_name }}', '{{ $car->color }}', {{ $car->seats }}, '{{ ucfirst($car->fuel_type) }}', '{{ ucfirst($car->transmission) }}', '{{ $car->description }}', {{ $car->daily_rate }}, '{{ $car->image ? Storage::url($car->image) : '' }}')">
-                <i class="fas fa-eye"></i> View Details
-              </button>
-              @auth
-                <a href="{{ route('reservations.create', ['car_id' => $car->id]) }}" class="btn btn-success btn-sm">
-                  <i class="fas fa-calendar-plus"></i> Reserve Now
-                </a>
-              @else
-                <a href="{{ route('login') }}" class="btn btn-warning btn-sm">
-                  <i class="fas fa-sign-in-alt"></i> Login to Reserve
-                </a>
-              @endauth
-            </div>
+        </div>
+        <div class="car-card-body">
+          <h4 class="car-card-title">{{ $car->full_name }}</h4>
+          <div class="car-specs">
+            <span class="car-spec"><i class="fas fa-palette"></i> {{ $car->color }}</span>
+            <span class="car-spec"><i class="fas fa-users"></i> {{ $car->seats }} seats</span>
+            <span class="car-spec"><i class="fas fa-gas-pump"></i> {{ ucfirst($car->fuel_type) }}</span>
+            <span class="car-spec"><i class="fas fa-cog"></i> {{ ucfirst($car->transmission) }}</span>
+          </div>
+          <p class="car-description">{{ Str::limit($car->description, 100) }}</p>
+          <div class="car-card-actions">
+            <button type="button" class="btn-view" onclick="showCarDetails({{ $car->id }}, '{{ $car->full_name }}', '{{ $car->color }}', {{ $car->seats }}, '{{ ucfirst($car->fuel_type) }}', '{{ ucfirst($car->transmission) }}', '{{ $car->description }}', {{ $car->daily_rate }}, '{{ $car->image ? asset('storage/' . $car->image) : '' }}')">
+              <i class="fas fa-eye"></i> Details
+            </button>
+            @auth
+              <a href="{{ route('reservations.create', ['car_id' => $car->id]) }}" class="btn-reserve">
+                <i class="fas fa-calendar-plus"></i> Reserve
+              </a>
+            @else
+              <a href="{{ route('login') }}" class="btn-login">
+                <i class="fas fa-sign-in-alt"></i> Login
+              </a>
+            @endauth
           </div>
         </div>
       </div>
       @endforeach
     </div>
     
-    <div class="row mt-4">
-      <div class="col-lg-12 text-center">
-        <a href="{{ route('cars.index') }}" class="btn btn-primary btn-lg">
-          <i class="fas fa-list"></i> View All Cars
-        </a>
-      </div>
+    <div class="text-center mt-5">
+      <a href="{{ route('cars.index') }}" class="view-all-btn">
+        <i class="fas fa-th-list"></i>
+        <span>View All Cars</span>
+      </a>
     </div>
     @else
-    <div class="row">
-      <div class="col-lg-12">
-        <div class="alert alert-info text-center">
-          <i class="fas fa-info-circle"></i> No cars available at the moment. Please check back later.
-        </div>
-      </div>
+    <div class="empty-state">
+      <i class="fas fa-car-side"></i>
+      <h4>No Cars Available</h4>
+      <p>Our fleet is currently being updated. Please check back soon!</p>
     </div>
     @endif
   </div>
 </section>
-<!-- Featured Cars Section End -->
+<!-- Available Cars Section End -->
 
 <!-- Car Details Modal -->
 <div class="modal fade" id="carDetailsModal">
-  <div class="modal-dialog modal-lg">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title">Car Details</h4>
+        <h4 class="modal-title"><i class="fas fa-car me-2"></i>Car Details</h4>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -241,65 +217,64 @@
           <div class="col-md-6">
             <div class="car-image-container text-center mb-3">
               <img id="modalCarImage" src="" alt="Car Image" class="img-fluid rounded" style="max-height: 300px; width: auto;">
-              <div id="modalNoImage" class="no-image-placeholder d-none">
+              <div id="modalNoImage" class="no-image-placeholder d-none" style="padding: 60px 0;">
                 <i class="fas fa-car fa-5x text-muted"></i>
                 <p class="text-muted mt-2">No image available</p>
               </div>
             </div>
           </div>
           <div class="col-md-6">
-            <h5 id="modalCarName" class="text-primary mb-3"></h5>
+            <h5 id="modalCarName" class="mb-3" style="font-family: 'Outfit', sans-serif; font-weight: 700; color: var(--text-primary);"></h5>
             <div class="car-specs">
               <div class="row mb-2">
-                <div class="col-6"><strong>Color:</strong></div>
+                <div class="col-6"><strong><i class="fas fa-palette me-2" style="color: var(--accent-gold);"></i>Color:</strong></div>
                 <div class="col-6" id="modalCarColor"></div>
               </div>
               <div class="row mb-2">
-                <div class="col-6"><strong>Seats:</strong></div>
+                <div class="col-6"><strong><i class="fas fa-users me-2" style="color: var(--accent-gold);"></i>Seats:</strong></div>
                 <div class="col-6" id="modalCarSeats"></div>
               </div>
               <div class="row mb-2">
-                <div class="col-6"><strong>Fuel Type:</strong></div>
+                <div class="col-6"><strong><i class="fas fa-gas-pump me-2" style="color: var(--accent-gold);"></i>Fuel Type:</strong></div>
                 <div class="col-6" id="modalCarFuelType"></div>
               </div>
               <div class="row mb-2">
-                <div class="col-6"><strong>Transmission:</strong></div>
+                <div class="col-6"><strong><i class="fas fa-cog me-2" style="color: var(--accent-gold);"></i>Transmission:</strong></div>
                 <div class="col-6" id="modalCarTransmission"></div>
               </div>
               <div class="row mb-3">
-                <div class="col-6"><strong>Daily Rate:</strong></div>
+                <div class="col-6"><strong><i class="fas fa-tag me-2" style="color: var(--accent-gold);"></i>Daily Rate:</strong></div>
                 <div class="col-6">
                   <span class="badge badge-success" id="modalCarPrice"></span>
                 </div>
               </div>
             </div>
-            <div class="car-description">
-              <h6>Description:</h6>
-              <p id="modalCarDescription" class="text-muted"></p>
+            <div class="car-description mt-3">
+              <h6 style="font-weight: 700;"><i class="fas fa-info-circle me-2" style="color: var(--accent-gold);"></i>Description:</h6>
+              <p id="modalCarDescription" class="text-muted" style="line-height: 1.7;"></p>
             </div>
           </div>
         </div>
       </div>
       <div class="modal-footer justify-content-between">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          <i class="fas fa-times me-1"></i>Close
+        </button>
         <div>
           @auth
-            <a href="#" id="modalReserveBtn" class="btn btn-success">
+            <a href="#" id="modalReserveBtn" class="btn-reserve" style="padding: 10px 24px;">
               <i class="fas fa-calendar-plus"></i> Reserve Now
             </a>
           @else
-            <a href="{{ route('login') }}" class="btn btn-warning">
+            <a href="{{ route('login') }}" class="btn-login" style="padding: 10px 24px;">
               <i class="fas fa-sign-in-alt"></i> Login to Reserve
             </a>
           @endauth
         </div>
       </div>
     </div>
-    <!-- /.modal-content -->
   </div>
-  <!-- /.modal-dialog -->
 </div>
-<!-- /.modal -->
 @endsection
 
 @section('scripts')

@@ -60,7 +60,18 @@ class RentalPolicy
      */
     public function processReturn(User $user, Rental $rental): bool
     {
-        return $user->isAdmin(); // Only admin can process returns
+        return $user->isAdmin();
+    }
+
+    /**
+     * Determine whether the customer can submit a return.
+     */
+    public function returnAsCustomer(User $user, Rental $rental): bool
+    {
+        $canSubmitReturn = $rental->status === 'active';
+        $canUpdatePayment = $rental->status === 'returned' && $rental->overdue_payment_status === 'pending';
+
+        return $user->isCustomer() && $rental->user_id === $user->id && ($canSubmitReturn || $canUpdatePayment);
     }
 
     /**

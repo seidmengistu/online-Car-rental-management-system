@@ -26,7 +26,7 @@
       <!-- Header -->
       <nav class="app-header navbar navbar-expand bg-body">
         <div class="container-fluid">
-          <ul class="navbar-nav">
+          <ul class="navbar-nav align-items-center gap-2">
             <li class="nav-item">
               <a class="nav-link" data-lte-toggle="sidebar" href="#" role="button">
                 <i class="bi bi-list"></i>
@@ -34,6 +34,12 @@
             </li>
             <li class="nav-item d-none d-md-block"><a href="{{ route('home') }}" class="nav-link">Home</a></li>
             <li class="nav-item d-none d-md-block"><a href="{{ route('dashboard') }}" class="nav-link">Customer View</a></li>
+            <li class="nav-item d-none d-md-block">
+              <div class="nav-link text-muted d-flex align-items-center gap-1">
+                <i class="bi bi-translate"></i>
+                <div id="google_translate_element_admin"></div>
+              </div>
+            </li>
           </ul>
           <ul class="navbar-nav ms-auto">
             <li class="nav-item">
@@ -105,6 +111,12 @@
                 <a href="{{ route('admin.reservations.index') }}" class="nav-link {{ request()->routeIs('admin.reservations.*') ? 'active' : '' }}">
                   <i class="nav-icon bi bi-calendar-check"></i>
                   <p>Bookings</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ route('admin.returns.index') }}" class="nav-link {{ request()->routeIs('admin.returns.*') ? 'active' : '' }}">
+                  <i class="nav-icon bi bi-box-arrow-in-left"></i>
+                  <p>Manage Returns</p>
                 </a>
               </li>
               @if(Auth::user()->isManager())
@@ -183,6 +195,17 @@
     <!-- jsvectormap -->
     <script src="https://cdn.jsdelivr.net/npm/jsvectormap@1.5.3/dist/js/jsvectormap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jsvectormap@1.5.3/dist/maps/world.js"></script>
+    <script>
+      function initGoogleTranslateWidget() {
+        if (window.google && google.translate) {
+          const options = { pageLanguage: 'en', includedLanguages: 'en,am', layout: google.translate.TranslateElement.InlineLayout.SIMPLE };
+          if (document.getElementById('google_translate_element_admin')) {
+            new google.translate.TranslateElement(options, 'google_translate_element_admin');
+          }
+        }
+      }
+    </script>
+    <script src="https://translate.google.com/translate_a/element.js?cb=initGoogleTranslateWidget"></script>
     @stack('scripts')
   </body>
 </html> 

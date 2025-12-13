@@ -998,3 +998,675 @@ div#mCSB_1_container {
     }
 }
 
+/* ===================================================================
+   Header Styling - Matching Landing Page Theme
+   Deep Purple/Navy + Gold Accent
+   =================================================================== */
+
+/* Header Top Bar - Transparent */
+.header.home-three .header-top-one {
+    background: transparent !important;
+    /* border-bottom: 1px solid rgba(212, 168, 83, 0.1) !important; */
+}
+
+.header.home-three .header-top-one .header-top-info p,
+.header.home-three .header-top-one .header-top-info i {
+    color: rgba(255, 255, 255, 0.6) !important;
+}
+
+.header.home-three .header-top-one .header-top-contact-info ul li,
+.header.home-three .header-top-one .header-top-contact-info ul li a,
+.header.home-three .header-top-one .header-top-contact-info ul li i {
+    color: rgba(255, 255, 255, 0.6) !important;
+    transition: color 0.3s ease !important;
+}
+
+.header.home-three .header-top-one .header-top-contact-info ul li a:hover {
+    color: #d4a853 !important;
+}
+
+/* Main Header - Glass Dark Theme */
+.home-three .main_header_inner {
+    background: linear-gradient(135deg, rgba(10, 10, 26, 0.98) 0%, rgba(26, 26, 62, 0.98) 100%) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(212, 168, 83, 0.08) !important;
+    border-radius: 12px !important;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Navigation Links */
+.home-three .main-menu .navigation > li > a {
+    color: rgba(255, 255, 255, 0.9) !important;
+    font-weight: 500 !important;
+    font-size: 15px !important;
+    letter-spacing: 0.3px !important;
+    transition: all 0.3s ease !important;
+    position: relative !important;
+}
+
+.home-three .main-menu .navigation > li > a::after {
+    content: '' !important;
+    position: absolute !important;
+    bottom: -5px !important;
+    left: 50% !important;
+    transform: translateX(-50%) scaleX(0) !important;
+    width: 20px !important;
+    height: 2px !important;
+    background: linear-gradient(90deg, #d4a853, #f0d78c) !important;
+    border-radius: 2px !important;
+    transition: transform 0.3s ease !important;
+}
+
+.home-three .main-menu .navigation > li:hover > a,
+.home-three .main-menu .navigation > li.active > a,
+.home-three .main-menu .navigation > li.current > a {
+    color: #d4a853 !important;
+}
+
+.home-three .main-menu .navigation > li:hover > a::after,
+.home-three .main-menu .navigation > li.active > a::after {
+    transform: translateX(-50%) scaleX(1) !important;
+}
+
+/* Dropdown Arrow */
+.home-three .main-menu .navigation li.dropdown .dropdown-btn i {
+    color: rgba(255, 255, 255, 0.6) !important;
+    transition: all 0.3s ease !important;
+}
+
+.home-three .main-menu .navigation > li.dropdown:hover .dropdown-btn i {
+    color: #d4a853 !important;
+    transform: rotate(180deg) !important;
+}
+
+/* Dropdown Menus */
+.home-three .main-menu .navigation > li > ul {
+    background: #0a0a1a !important;
+    border: 1px solid rgba(212, 168, 83, 0.15) !important;
+    border-radius: 12px !important;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5) !important;
+    padding: 10px !important;
+}
+
+.home-three .main-menu .navigation > li > ul > li {
+    background: transparent !important;
+    border-bottom: 1px solid rgba(212, 168, 83, 0.08) !important;
+}
+
+.home-three .main-menu .navigation > li > ul > li:last-child {
+    border-bottom: none !important;
+}
+
+.home-three .main-menu .navigation > li > ul > li > a {
+    color: rgba(255, 255, 255, 0.85) !important;
+    padding: 12px 18px !important;
+    border-radius: 8px !important;
+    transition: all 0.3s ease !important;
+    font-size: 14px !important;
+}
+
+.home-three .main-menu .navigation > li > ul > li > a::before,
+.home-three .main-menu .navigation > li > ul > li > a::after {
+    display: none !important;
+}
+
+.home-three .main-menu .navigation > li > ul > li:hover > a {
+    color: #d4a853 !important;
+    background: rgba(212, 168, 83, 0.1) !important;
+    padding-left: 22px !important;
+}
+
+/* Account Button */
+.home-three .header_right_content .btn-style-one,
+.home-three .header_right_content .link-btn .btn-style-one {
+    background: linear-gradient(135deg, #d4a853 0%, #c49a47 100%) !important;
+    color: #0a0a1a !important;
+    font-weight: 600 !important;
+    font-size: 14px !important;
+    border: none !important;
+    padding: 12px 22px !important;
+    border-radius: 10px !important;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    box-shadow: 0 4px 20px rgba(212, 168, 83, 0.25) !important;
+    position: relative !important;
+    overflow: hidden !important;
+}
+
+.home-three .header_right_content .btn-style-one::before,
+.home-three .header_right_content .link-btn .btn-style-one::before {
+    content: '' !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: -100% !important;
+    width: 100% !important;
+    height: 100% !important;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent) !important;
+    transition: left 0.5s ease !important;
+}
+
+.home-three .header_right_content .btn-style-one:hover,
+.home-three .header_right_content .link-btn .btn-style-one:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 30px rgba(212, 168, 83, 0.4), 0 0 20px rgba(212, 168, 83, 0.2) !important;
+    color: #0a0a1a !important;
+}
+
+.home-three .header_right_content .btn-style-one:hover::before,
+.home-three .header_right_content .link-btn .btn-style-one:hover::before {
+    left: 100% !important;
+}
+
+/* Account Dropdown */
+.home-three .header_right_content .dropdown-menu {
+    background: #0a0a1a !important;
+    border: 1px solid rgba(212, 168, 83, 0.15) !important;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5) !important;
+    border-radius: 14px !important;
+    padding: 10px !important;
+    margin-top: 12px !important;
+}
+
+.home-three .header_right_content .dropdown-item {
+    color: rgba(255, 255, 255, 0.85) !important;
+    padding: 12px 18px !important;
+    border-radius: 10px !important;
+    transition: all 0.3s ease !important;
+    font-size: 14px !important;
+    background: transparent !important;
+}
+
+.home-three .header_right_content .dropdown-item:hover {
+    background: rgba(212, 168, 83, 0.12) !important;
+    color: #d4a853 !important;
+    transform: translateX(5px) !important;
+}
+
+.home-three .header_right_content .dropdown-item i {
+    color: #d4a853 !important;
+}
+
+.home-three .header_right_content .dropdown-divider {
+    border-color: rgba(212, 168, 83, 0.12) !important;
+}
+
+/* ===== HIDE GOOGLE TRANSLATE TOP BANNER ===== */
+.goog-te-banner-frame,
+.goog-te-banner-frame.skiptranslate,
+iframe.goog-te-banner-frame {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    opacity: 0 !important;
+}
+
+body {
+    top: 0 !important;
+    position: relative !important;
+}
+
+html.translated-ltr body,
+html.translated-rtl body {
+    top: 0 !important;
+}
+
+/* ===== Custom Language Switcher - Elegant Dark Style ===== */
+.custom-language-switcher {
+    position: relative;
+    margin-right: 20px;
+}
+
+.custom-language-switcher .lang-toggle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 10px 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: rgba(255, 255, 255, 0.9);
+    font-family: 'Outfit', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.custom-language-switcher .lang-toggle:hover {
+    background: rgba(212, 168, 83, 0.12);
+    border-color: rgba(212, 168, 83, 0.3);
+}
+
+.custom-language-switcher .lang-toggle .fa-globe {
+    color: #d4a853;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.custom-language-switcher .lang-toggle:hover .fa-globe {
+    color: #f0d78c;
+    transform: rotate(15deg);
+}
+
+.custom-language-switcher .lang-toggle .arrow {
+    font-size: 10px;
+    color: #d4a853;
+    transition: transform 0.3s ease;
+}
+
+.custom-language-switcher.open .lang-toggle .arrow {
+    transform: rotate(180deg);
+}
+
+.custom-language-switcher .current-lang {
+    min-width: 50px;
+}
+
+/* Dropdown Menu */
+.custom-language-switcher .lang-dropdown {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    min-width: 200px;
+    background: linear-gradient(180deg, #0a0a1a 0%, #12122a 100%);
+    border: 1px solid rgba(212, 168, 83, 0.2);
+    border-radius: 12px;
+    padding: 8px;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6), 0 0 30px rgba(212, 168, 83, 0.08);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1000;
+}
+
+.custom-language-switcher.open .lang-dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+/* Language Options */
+.custom-language-switcher .lang-option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: rgba(255, 255, 255, 0.85);
+    font-family: 'Outfit', sans-serif;
+    font-size: 14px;
+}
+
+.custom-language-switcher .lang-option:hover {
+    background: rgba(212, 168, 83, 0.12);
+    color: #d4a853;
+    padding-left: 20px;
+}
+
+.custom-language-switcher .lang-option.active {
+    background: rgba(212, 168, 83, 0.15);
+    color: #d4a853;
+    border-left: 3px solid #d4a853;
+}
+
+.custom-language-switcher .lang-option .check-icon {
+    opacity: 0;
+    color: #d4a853;
+    font-size: 12px;
+    transition: opacity 0.2s ease;
+}
+
+.custom-language-switcher .lang-option.active .check-icon {
+    opacity: 1;
+}
+
+.custom-language-switcher .lang-option .lang-name {
+    flex: 1;
+}
+
+/* Hide original Google Translate widget visually but keep it functional */
+#google_translate_landing {
+    position: absolute !important;
+    left: -9999px !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
+
+/* Legacy Google Translate Widget styling (fallback) */
+.google-translate-wrapper {
+    margin-right: 20px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+}
+
+.home-three .google-translate-wrapper {
+    background: rgba(255, 255, 255, 0.06) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 10px !important;
+    padding: 8px 14px !important;
+    transition: all 0.3s ease !important;
+}
+
+.home-three .google-translate-wrapper:hover {
+    background: rgba(212, 168, 83, 0.12) !important;
+    border-color: rgba(212, 168, 83, 0.3) !important;
+}
+
+/* Translate Icon */
+.translate-icon {
+    color: #d4a853 !important;
+    font-size: 14px !important;
+    transition: all 0.3s ease !important;
+}
+
+.google-translate-wrapper:hover .translate-icon {
+    color: #f0d78c !important;
+    transform: rotate(15deg) !important;
+}
+
+/* Custom Language Switcher - Mobile Responsive */
+@media only screen and (max-width: 991px) {
+    .custom-language-switcher {
+        margin-right: 15px;
+    }
+    
+    .custom-language-switcher .lang-toggle {
+        padding: 8px 12px;
+        font-size: 12px;
+    }
+    
+    .custom-language-switcher .current-lang {
+        display: none;
+    }
+    
+    .custom-language-switcher .lang-toggle .arrow {
+        display: none;
+    }
+    
+    .custom-language-switcher .lang-dropdown {
+        right: -50px;
+        min-width: 180px;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .custom-language-switcher {
+        display: none;
+    }
+}
+
+/* Hide all Google branding and unnecessary elements */
+.goog-te-gadget > span,
+.goog-te-gadget img,
+.goog-logo-link,
+.goog-te-gadget-icon,
+#goog-gt-tt,
+.goog-te-balloon-frame,
+.goog-tooltip,
+.VIpgJd-ZVi9od-l4eHX-hSRGPd,
+.VIpgJd-ZVi9od-ORHb-OEVmcd {
+    display: none !important;
+}
+
+/* Main gadget container */
+.goog-te-gadget {
+    font-family: 'Outfit', sans-serif !important;
+    font-size: 0 !important;
+    line-height: 1 !important;
+}
+
+/* The dropdown select element */
+.goog-te-gadget .goog-te-combo {
+    background: transparent !important;
+    border: none !important;
+    color: rgba(255, 255, 255, 0.9) !important;
+    font-family: 'Outfit', sans-serif !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    padding: 4px 24px 4px 8px !important;
+    cursor: pointer !important;
+    outline: none !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' fill='%23d4a853' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 4px center !important;
+}
+
+.goog-te-gadget .goog-te-combo:hover {
+    color: #d4a853 !important;
+}
+
+/* Dropdown options */
+.goog-te-gadget .goog-te-combo option {
+    background: #0a0a1a !important;
+    color: rgba(255, 255, 255, 0.9) !important;
+    padding: 12px 16px !important;
+    font-size: 14px !important;
+    font-family: 'Outfit', sans-serif !important;
+}
+
+/* Skiptranslate wrapper */
+.skiptranslate {
+    font-size: 0 !important;
+}
+
+/* Simple gadget styling */
+#google_translate_landing .goog-te-gadget-simple {
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    font-size: 13px !important;
+}
+
+#google_translate_landing .goog-te-gadget-simple span {
+    color: rgba(255, 255, 255, 0.9) !important;
+    border: none !important;
+}
+
+#google_translate_landing .goog-te-gadget-simple .goog-te-menu-value {
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+#google_translate_landing .goog-te-gadget-simple .goog-te-menu-value span:first-child {
+    display: none !important;
+}
+
+#google_translate_landing .goog-te-gadget-simple .goog-te-menu-value:hover {
+    color: #d4a853 !important;
+}
+
+/* Style the dropdown popup menu */
+.goog-te-menu-frame {
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5) !important;
+}
+
+.goog-te-menu2 {
+    background: #0a0a1a !important;
+    border: 1px solid rgba(212, 168, 83, 0.2) !important;
+}
+
+.goog-te-menu2-item div,
+.goog-te-menu2-item span {
+    color: rgba(255, 255, 255, 0.9) !important;
+    font-family: 'Outfit', sans-serif !important;
+    padding: 8px 16px !important;
+}
+
+.goog-te-menu2-item:hover div,
+.goog-te-menu2-item:hover span {
+    background: rgba(212, 168, 83, 0.15) !important;
+    color: #d4a853 !important;
+}
+
+.goog-te-menu2-item-selected div,
+.goog-te-menu2-item-selected span {
+    background: rgba(212, 168, 83, 0.2) !important;
+    color: #d4a853 !important;
+}
+
+/* Search Icon */
+.home-three .main_header_inner .search-toggler {
+    color: rgba(255, 255, 255, 0.8) !important;
+    transition: color 0.3s ease !important;
+}
+
+.home-three .main_header_inner .search-toggler:hover {
+    color: #d4a853 !important;
+}
+
+/* Sticky Header */
+.home-three.fixed_header .sticky_header {
+    background: linear-gradient(135deg, rgba(10, 10, 26, 0.98) 0%, rgba(26, 26, 62, 0.98) 100%) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4) !important;
+}
+
+.home-three .sticky_header .main_header_inner {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* Mobile Nav Toggler */
+.home-three .menu_area .mobile-nav-toggler .icon-bar {
+    background: #d4a853 !important;
+    height: 3px !important;
+    border-radius: 2px !important;
+    transition: all 0.3s ease !important;
+}
+
+.home-three .menu_area .mobile-nav-toggler:hover .icon-bar {
+    background: #f0d78c !important;
+}
+
+/* Mobile Menu */
+.mobile-menu .menu-box {
+    background: linear-gradient(180deg, #0a0a1a 0%, #1a1a3e 100%) !important;
+}
+
+.mobile-menu .nav-logo {
+    padding: 25px !important;
+    border-bottom: 1px solid rgba(212, 168, 83, 0.1) !important;
+}
+
+.mobile-menu .navigation li {
+    border-color: rgba(212, 168, 83, 0.08) !important;
+}
+
+.mobile-menu .navigation li > a {
+    color: rgba(255, 255, 255, 0.9) !important;
+    padding: 15px 20px !important;
+    font-size: 15px !important;
+    transition: all 0.3s ease !important;
+}
+
+.mobile-menu .navigation li > a:hover,
+.mobile-menu .navigation li.current > a {
+    color: #d4a853 !important;
+}
+
+.mobile-menu .navigation li > a::before {
+    border-left-color: #d4a853 !important;
+}
+
+.mobile-menu .navigation li ul li > a {
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.mobile-menu .navigation li ul li > a:hover {
+    color: #d4a853 !important;
+}
+
+.mobile-menu .navigation li.dropdown .dropdown-btn {
+    background: rgba(212, 168, 83, 0.15) !important;
+    color: #d4a853 !important;
+    border-radius: 6px !important;
+}
+
+.mobile-menu .close-btn {
+    background: linear-gradient(135deg, #d4a853 0%, #c49a47 100%) !important;
+    color: #0a0a1a !important;
+    font-weight: 700 !important;
+    width: 36px !important;
+    height: 36px !important;
+    line-height: 36px !important;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 15px rgba(212, 168, 83, 0.3) !important;
+}
+
+.mobile-menu .contact-info {
+    padding: 30px 20px !important;
+    border-top: 1px solid rgba(212, 168, 83, 0.1) !important;
+}
+
+.mobile-menu .contact-info h4 {
+    color: #d4a853 !important;
+    font-size: 16px !important;
+}
+
+.mobile-menu .contact-info ul li,
+.mobile-menu .contact-info ul li a {
+    color: rgba(255, 255, 255, 0.6) !important;
+}
+
+.mobile-menu .contact-info ul li a:hover {
+    color: #d4a853 !important;
+}
+
+.mobile-menu .social-links li a {
+    background: rgba(212, 168, 83, 0.1) !important;
+    color: #d4a853 !important;
+    border: 1px solid rgba(212, 168, 83, 0.2) !important;
+    border-radius: 8px !important;
+    transition: all 0.3s ease !important;
+}
+
+.mobile-menu .social-links li a:hover {
+    background: #d4a853 !important;
+    color: #0a0a1a !important;
+    transform: translateY(-3px) !important;
+}
+
+.mobile-menu .menu-backdrop {
+    background: rgba(10, 10, 26, 0.85) !important;
+    backdrop-filter: blur(5px) !important;
+}
+
+/* Search Popup */
+.search-popup .popup-inner {
+    background: linear-gradient(180deg, #0a0a1a 0%, #1a1a3e 100%) !important;
+}
+
+.search-popup .close-search {
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.search-popup .close-search:hover {
+    color: #d4a853 !important;
+}
+
+.search-popup .search-form fieldset input[type="search"] {
+    background: transparent !important;
+    color: rgba(255, 255, 255, 0.9) !important;
+    border-bottom-color: rgba(212, 168, 83, 0.3) !important;
+}
+
+.search-popup .search-form fieldset input[type="search"]:focus {
+    border-color: #d4a853 !important;
+}
+
+.search-popup .search-form fieldset input[type="search"]::placeholder {
+    color: rgba(255, 255, 255, 0.4) !important;
+}
+
+.search-popup .search-form fieldset button[type="submit"] {
+    color: #d4a853 !important;
+}
+

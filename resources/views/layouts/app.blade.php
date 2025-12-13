@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="{{ asset('adminlte/dist/css/adminlte.css') }}" />
     @stack('styles')
   </head>
-  <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
+  <body class="layout-fixed fixed-header sidebar-expand-lg bg-body-tertiary">
     <div class="app-wrapper">
       <!-- Header -->
       <nav class="app-header navbar navbar-expand bg-body">
@@ -28,12 +28,14 @@
                 <i class="bi bi-list"></i>
               </a>
             </li>
-            <li class="nav-item d-none d-md-block"><a href="{{ route('home') }}" class="nav-link">Home</a></li>
-            <li class="nav-item d-none d-md-block"><a href="{{ route('cars.index') }}" class="nav-link">Cars</a></li>
-            <li class="nav-item d-none d-md-block"><a href="{{ route('reservations.index') }}" class="nav-link">Reservations</a></li>
-            <li class="nav-item d-none d-md-block"><a href="{{ route('rentals.index') }}" class="nav-link">Rentals</a></li>
           </ul>
-          <ul class="navbar-nav ms-auto">
+          <ul class="navbar-nav ms-auto align-items-center gap-2">
+            <li class="nav-item d-none d-md-block">
+              <div class="nav-link text-muted d-flex align-items-center gap-1">
+                <i class="bi bi-translate"></i>
+                <div id="google_translate_element_global"></div>
+              </div>
+            </li>
             @auth
             <li class="nav-item dropdown user-menu">
               <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
@@ -76,7 +78,7 @@
         </div>
       </nav>
       <!-- Sidebar -->
-      <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
+      <aside class="app-sidebar bg-body shadow">
         <div class="sidebar-brand">
           <a href="{{ route('dashboard') }}" class="brand-link">
             <span class="brand-text fw-light">Carola</span>
@@ -158,6 +160,12 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
               </div>
             @endif
+            @if(session('info'))
+              <div class="alert alert-info alert-dismissible fade show" role="alert">
+                {{ session('info') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+              </div>
+            @endif
             @yield('content')
           </div>
         </div>
@@ -174,6 +182,20 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.10.1/browser/overlayscrollbars.browser.es6.min.js"></script>
     <script src="{{ asset('adminlte/dist/js/adminlte.js') }}"></script>
+    <script>
+      function initGoogleTranslateWidget() {
+        if (window.google && google.translate) {
+          const options = { pageLanguage: 'en', includedLanguages: 'en,am', layout: google.translate.TranslateElement.InlineLayout.SIMPLE };
+          if (document.getElementById('google_translate_element_global')) {
+            new google.translate.TranslateElement(options, 'google_translate_element_global');
+          }
+          if (document.getElementById('google_translate_element_dashboard')) {
+            new google.translate.TranslateElement(options, 'google_translate_element_dashboard');
+          }
+        }
+      }
+    </script>
+    <script src="https://translate.google.com/translate_a/element.js?cb=initGoogleTranslateWidget"></script>
     @stack('scripts')
   </body>
 </html> 

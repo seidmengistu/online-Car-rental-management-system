@@ -85,6 +85,14 @@ class User extends Authenticatable
     }
 
     /**
+     * Payments made by the user
+     */
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
+
+    /**
      * Check if the user is a customer
      */
     public function isCustomer()

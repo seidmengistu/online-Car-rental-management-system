@@ -13,6 +13,7 @@ class Rental extends Model
         'reservation_id',
         'user_id',
         'car_id',
+        'requires_driver',
         'start_date',
         'end_date',
         'actual_start_date',
@@ -28,6 +29,16 @@ class Rental extends Model
         'return_notes',
         'damage_report',
         'additional_charges',
+        'overdue_fee',
+        'overdue_payment_status',
+        'overdue_payment_method',
+        'overdue_payment_reference',
+        'overdue_receipt_path',
+        'overdue_payment_notes',
+        'overdue_paid_at',
+        'return_verified_at',
+        'return_verified_by',
+        'return_verification_notes',
     ];
 
     protected $casts = [
@@ -38,6 +49,10 @@ class Rental extends Model
         'total_amount' => 'decimal:2',
         'deposit_amount' => 'decimal:2',
         'additional_charges' => 'decimal:2',
+        'overdue_fee' => 'decimal:2',
+        'overdue_paid_at' => 'datetime',
+        'return_verified_at' => 'datetime',
+        'requires_driver' => 'boolean',
     ];
 
     /**
@@ -78,6 +93,14 @@ class Rental extends Model
     public function returnedBy()
     {
         return $this->belongsTo(User::class, 'returned_by');
+    }
+
+    /**
+     * Get the staff member who verified the return
+     */
+    public function verifiedBy()
+    {
+        return $this->belongsTo(User::class, 'return_verified_by');
     }
 
     /**

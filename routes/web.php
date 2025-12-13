@@ -7,6 +7,7 @@ use App\Http\Controllers\CarController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\RentalController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PaymentController;
 
 // Public routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -52,10 +53,15 @@ Route::middleware('auth')->group(function () {
         Route::post('/reservations', [ReservationController::class, 'store'])->name('reservations.store');
         Route::get('/reservations/{reservation}', [ReservationController::class, 'show'])->name('reservations.show');
         Route::patch('/reservations/{reservation}/cancel', [ReservationController::class, 'cancel'])->name('reservations.cancel');
+        Route::get('/reservations/{reservation}/payment', [PaymentController::class, 'create'])->name('reservations.payment');
+        Route::post('/reservations/{reservation}/payment', [PaymentController::class, 'store'])->name('reservations.payment.process');
+        Route::get('/reservations/{reservation}/receipt', [PaymentController::class, 'receipt'])->name('reservations.receipt');
 
         // Rentals (customer view)
         Route::get('/rentals', [RentalController::class, 'index'])->name('rentals.index');
         Route::get('/rentals/{rental}', [RentalController::class, 'show'])->name('rentals.show');
+        Route::get('/rentals/{rental}/return', [RentalController::class, 'returnForm'])->name('rentals.return.form');
+        Route::post('/rentals/{rental}/return', [RentalController::class, 'submitReturn'])->name('rentals.return.submit');
     });
 });
 
@@ -86,6 +92,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/reservations', [ReservationController::class, 'adminIndex'])->name('reservations.index');
     Route::patch('/reservations/{reservation}/status', [ReservationController::class, 'updateStatus'])->name('reservations.update-status');
     Route::patch('/reservations/{reservation}/convert-to-rental', [ReservationController::class, 'convertToRental'])->name('reservations.convert-to-rental');
+    Route::patch('/reservations/{reservation}/payments/approve', [ReservationController::class, 'approvePayment'])->name('reservations.payments.approve');
+    Route::patch('/reservations/{reservation}/payments/reset', [ReservationController::class, 'resetPayment'])->name('reservations.payments.reset');
     Route::delete('/reservations/{reservation}', [ReservationController::class, 'destroy'])->name('reservations.destroy');
 
     // Rental management
@@ -94,7 +102,11 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('/rentals', [RentalController::class, 'store'])->name('rentals.store');
     Route::patch('/rentals/{rental}/status', [RentalController::class, 'updateStatus'])->name('rentals.update-status');
     Route::patch('/rentals/{rental}/return', [RentalController::class, 'processReturn'])->name('rentals.process-return');
+    Route::patch('/rentals/{rental}/return/approve', [RentalController::class, 'approveReturn'])->name('rentals.return.approve');
+    Route::patch('/rentals/{rental}/overdue/pay', [RentalController::class, 'markOverduePaid'])->name('rentals.overdue.pay');
     Route::delete('/rentals/{rental}', [RentalController::class, 'destroy'])->name('rentals.destroy');
+    Route::get('/returns', [RentalController::class, 'returnManagement'])->name('returns.index');
+    Route::patch('/returns/{rental}/approve', [RentalController::class, 'approveReturn'])->name('returns.approve');
     
     // Reports (accessible to both managers and staff)
     Route::get('/reports', [AdminController::class, 'reports'])->name('reports');

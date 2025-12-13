@@ -20,12 +20,17 @@ class Reservation extends Model
         'status',
         'notes',
         'created_by',
+        'requires_driver',
+        'payment_status',
+        'payment_reference',
+        'payment_receipt_path',
     ];
 
     protected $casts = [
         'start_date' => 'date',
         'end_date' => 'date',
         'total_amount' => 'decimal:2',
+        'requires_driver' => 'boolean',
     ];
 
     /**
@@ -58,6 +63,14 @@ class Reservation extends Model
     public function rental()
     {
         return $this->hasOne(Rental::class);
+    }
+
+    /**
+     * Payments made for the reservation
+     */
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
     }
 
     /**

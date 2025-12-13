@@ -2,195 +2,230 @@
 
 @section('title', 'Create Reservation')
 
+@push('styles')
+<style>
+    .reservation-create-page {
+        padding-bottom: 3rem;
+    }
+
+    .reservation-hero {
+        background: linear-gradient(120deg, #4338ca 0%, #7c3aed 45%, #a855f7 100%);
+        color: white;
+        border-radius: 1.25rem;
+        padding: 2.25rem;
+        box-shadow: 0 30px 55px rgba(67,56,202,0.35);
+        margin-bottom: 2rem;
+    }
+
+    .hero-icon {
+        width: 72px;
+        height: 72px;
+        border-radius: 1rem;
+        background: rgba(255,255,255,0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.75rem;
+    }
+
+    .reservation-card {
+        border: none;
+        border-radius: 1.25rem;
+        box-shadow: 0 25px 45px rgba(15,23,42,0.08);
+        height: 100%;
+    }
+
+    .reservation-card .card-header {
+        border-bottom: 1px solid #edf0f7;
+        background: transparent;
+    }
+
+    .summary-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        padding: 0.35rem 0.85rem;
+        border-radius: 999px;
+        background: #eef2ff;
+        color: #4338ca;
+        font-weight: 600;
+    }
+
+    .cost-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+    }
+
+    .cost-block {
+        border: 1px solid #edf0f7;
+        border-radius: 0.9rem;
+        padding: 1rem;
+        background: #f8fafc;
+    }
+
+    .cost-block label {
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        font-size: 0.75rem;
+        color: #94a3b8;
+    }
+
+    .sticky-summary {
+        position: sticky;
+        top: 90px;
+    }
+</style>
+@endpush
+
 @section('content')
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">Create New Reservation</h3>
-                    <div class="card-tools">
-                        <a href="{{ route('cars.index') }}" class="btn btn-secondary btn-sm">
-                            <i class="fas fa-arrow-left"></i> Back to Cars
-                        </a>
+<div class="reservation-create-page container-fluid px-3 px-lg-4">
+    <div class="reservation-hero d-flex flex-wrap align-items-center gap-4">
+        <div class="hero-icon">
+            <i class="bi bi-calendar-plus"></i>
+        </div>
+        <div>
+            <h2 class="mb-1">Create a new reservation</h2>
+            <p class="mb-0 text-white-75">Choose your vehicle, set your trip dates, and we’ll take care of the rest.</p>
+        </div>
+        <div class="ms-auto text-lg-end">
+            <span class="summary-chip">
+                <i class="bi bi-car-front"></i>
+                {{ $availableCars->count() }} cars available
+            </span>
                     </div>
                 </div>
-                <div class="card-body">
+
                     <form method="POST" action="{{ route('reservations.store') }}">
                         @csrf
-                        
-                        <div class="row">
-                            <!-- Car Selection -->
-                            <div class="col-md-6">
-                                <div class="card">
+        <div class="row g-4">
+            <div class="col-xl-7">
+                <div class="card reservation-card mb-4">
                                     <div class="card-header">
-                                        <h5 class="card-title">Select Car</h5>
+                        <h5 class="card-title mb-0">Trip details</h5>
                                     </div>
                                     <div class="card-body">
-                                        <div class="form-group">
-                                            <label for="car_id">Car *</label>
-                                            <select class="form-control @error('car_id') is-invalid @enderror" id="car_id" name="car_id" required>
-                                                <option value="">Select a car...</option>
+                        <div class="row g-3">
+                            <div class="col-md-12">
+                                <label for="car_id" class="form-label fw-semibold">Select car *</label>
+                                <select class="form-select @error('car_id') is-invalid @enderror" id="car_id" name="car_id" required>
+                                    <option value="">Choose a vehicle...</option>
                                                 @foreach($availableCars as $availableCar)
                                                     <option value="{{ $availableCar->id }}" 
                                                         {{ (old('car_id', $car->id ?? '') == $availableCar->id) ? 'selected' : '' }}
                                                         data-daily-rate="{{ $availableCar->daily_rate }}">
-                                                        {{ $availableCar->full_name }} - ${{ number_format($availableCar->daily_rate, 2) }}/day
+                                            {{ $availableCar->full_name }} · ${{ number_format($availableCar->daily_rate, 2) }}/day
                                                     </option>
                                                 @endforeach
                                             </select>
                                             @error('car_id')
-                                                <span class="invalid-feedback">{{ $message }}</span>
+                                    <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
-                                        </div>
-
-                                        @if($car)
-                                        <div class="alert alert-info">
-                                            <h6>Selected Car Details:</h6>
-                                            <p class="mb-1"><strong>{{ $car->full_name }}</strong></p>
-                                            <p class="mb-1">Plate: {{ $car->plate_number }}</p>
-                                            <p class="mb-1">Color: {{ $car->color }}</p>
-                                            <p class="mb-0">Daily Rate: ${{ number_format($car->daily_rate, 2) }}</p>
-                                        </div>
-                                        @endif
-                                    </div>
-                                </div>
                             </div>
-
-                            <!-- Reservation Details -->
                             <div class="col-md-6">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h5 class="card-title">Reservation Details</h5>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label for="start_date">Start Date *</label>
+                                <label for="start_date" class="form-label fw-semibold">Start date *</label>
                                                     <input type="date" class="form-control @error('start_date') is-invalid @enderror" 
                                                            id="start_date" name="start_date" 
-                                                           value="{{ old('start_date') }}" 
-                                                           min="{{ date('Y-m-d') }}" required>
+                                       value="{{ old('start_date') }}" min="{{ date('Y-m-d') }}" required>
                                                     @error('start_date')
-                                                        <span class="invalid-feedback">{{ $message }}</span>
+                                    <div class="invalid-feedback">{{ $message }}</div>
                                                     @enderror
-                                                </div>
                                             </div>
                                             <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label for="end_date">End Date *</label>
+                                <label for="end_date" class="form-label fw-semibold">End date *</label>
                                                     <input type="date" class="form-control @error('end_date') is-invalid @enderror" 
-                                                           id="end_date" name="end_date" 
-                                                           value="{{ old('end_date') }}" required>
+                                       id="end_date" name="end_date" value="{{ old('end_date') }}" required>
                                                     @error('end_date')
-                                                        <span class="invalid-feedback">{{ $message }}</span>
+                                    <div class="invalid-feedback">{{ $message }}</div>
                                                     @enderror
                                                 </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="row">
                                             <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label for="pickup_location">Pickup Location *</label>
+                                <label for="pickup_location" class="form-label fw-semibold">Pickup location *</label>
                                                     <input type="text" class="form-control @error('pickup_location') is-invalid @enderror" 
-                                                           id="pickup_location" name="pickup_location" 
-                                                           value="{{ old('pickup_location') }}" 
+                                       id="pickup_location" name="pickup_location" value="{{ old('pickup_location') }}" 
                                                            placeholder="e.g., Main Office" required>
                                                     @error('pickup_location')
-                                                        <span class="invalid-feedback">{{ $message }}</span>
+                                    <div class="invalid-feedback">{{ $message }}</div>
                                                     @enderror
-                                                </div>
                                             </div>
                                             <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label for="return_location">Return Location *</label>
+                                <label for="return_location" class="form-label fw-semibold">Return location *</label>
                                                     <input type="text" class="form-control @error('return_location') is-invalid @enderror" 
-                                                           id="return_location" name="return_location" 
-                                                           value="{{ old('return_location') }}" 
+                                       id="return_location" name="return_location" value="{{ old('return_location') }}" 
                                                            placeholder="e.g., Main Office" required>
                                                     @error('return_location')
-                                                        <span class="invalid-feedback">{{ $message }}</span>
+                                    <div class="invalid-feedback">{{ $message }}</div>
                                                     @enderror
                                                 </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="notes">Additional Notes</label>
-                                            <textarea class="form-control @error('notes') is-invalid @enderror" 
-                                                      id="notes" name="notes" rows="3" 
+                            <div class="col-12">
+                                <label for="notes" class="form-label fw-semibold">Additional notes</label>
+                                <textarea class="form-control @error('notes') is-invalid @enderror" id="notes" name="notes" rows="4"
                                                       placeholder="Any special requirements or notes...">{{ old('notes') }}</textarea>
                                             @error('notes')
-                                                <span class="invalid-feedback">{{ $message }}</span>
+                                    <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
                                         </div>
-                                    </div>
+                            <div class="col-12">
+                                <div class="form-check form-switch mt-2">
+                                    <input class="form-check-input" type="checkbox" role="switch" id="requires_driver" name="requires_driver" value="1" {{ old('requires_driver') ? 'checked' : '' }}>
+                                    <label class="form-check-label fw-semibold" for="requires_driver">
+                                        I need a professional driver
+                                    </label>
                                 </div>
+                                <small class="text-muted d-block">Selecting this option lets our team assign a vetted driver for your reservation.</small>
                             </div>
                         </div>
-
-                        <!-- Cost Calculation -->
-                        <div class="row mt-3">
-                            <div class="col-12">
-                                <div class="card">
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-5">
+                <div class="sticky-summary">
+                    <div class="card reservation-card mb-4">
                                     <div class="card-header">
-                                        <h5 class="card-title">Cost Summary</h5>
+                            <h5 class="card-title mb-0">Cost summary</h5>
                                     </div>
                                     <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label>Daily Rate:</label>
+                            <div class="cost-grid">
+                                <div class="cost-block">
+                                    <label>Daily rate</label>
                                                     <div class="input-group">
-                                                        <div class="input-group-prepend">
                                                             <span class="input-group-text">$</span>
-                                                        </div>
                                                         <input type="text" class="form-control" id="daily_rate_display" readonly>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label>Number of Days:</label>
+                                <div class="cost-block">
+                                    <label>Number of days</label>
                                                     <input type="text" class="form-control" id="days_display" readonly>
                                                 </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label>Total Amount:</label>
+                                <div class="cost-block">
+                                    <label>Total amount</label>
                                                     <div class="input-group">
-                                                        <div class="input-group-prepend">
                                                             <span class="input-group-text">$</span>
-                                                        </div>
                                                         <input type="text" class="form-control" id="total_amount_display" readonly>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="row mt-3">
-                            <div class="col-12">
-                                <button type="submit" class="btn btn-primary btn-lg">
-                                    <i class="fas fa-calendar-plus"></i> Create Reservation
-                                </button>
-                                <a href="{{ route('cars.index') }}" class="btn btn-secondary btn-lg">
-                                    <i class="fas fa-times"></i> Cancel
-                                </a>
+                            @if($car)
+                            <div class="alert alert-info mt-3 mb-0">
+                                <h6 class="mb-1">Selected car</h6>
+                                <p class="mb-0">{{ $car->full_name }} · Plate {{ $car->plate_number }}</p>
                             </div>
+                            @endif
+                            <small class="text-muted d-block mt-3">After submitting, you can complete payment securely online and download your receipt instantly.</small>
                         </div>
-                    </form>
+                    </div>
+                    <div class="d-flex flex-wrap gap-2">
+                        <button type="submit" class="btn btn-primary flex-fill">
+                            <i class="bi bi-calendar-plus me-2"></i>Create reservation
+                        </button>
+                        <a href="{{ route('cars.index') }}" class="btn btn-outline-secondary flex-fill">
+                            Cancel
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </form>
 </div>
 
 @push('scripts')

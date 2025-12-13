@@ -7,6 +7,7 @@ use App\Models\Reservation;
 use App\Models\Rental;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
@@ -19,7 +20,7 @@ class ReservationController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Reservation::with(['car', 'user'])
+        $query = Reservation::with(['car'])
             ->where('user_id', auth()->id());
 
         if ($request->filled('status')) {
@@ -58,6 +59,7 @@ class ReservationController extends Controller
             'pickup_location' => 'required|string|max:255',
             'return_location' => 'required|string|max:255',
             'notes' => 'nullable|string',
+            'requires_driver' => 'nullable|boolean',
         ]);
 
         $car = Car::findOrFail($validated['car_id']);
@@ -82,7 +84,9 @@ class ReservationController extends Controller
             'return_location' => $validated['return_location'],
             'total_amount' => $totalAmount,
             'status' => 'pending',
-            'notes' => $validated['notes'],
+            'notes' => $validated['notes'] ?? null,
+            'requires_driver' => $request->boolean('requires_driver'),
+            'payment_status' => 'pending',
         ]);
 
         return redirect()->route('reservations.show', $reservation)
@@ -99,7 +103,9 @@ class ReservationController extends Controller
             abort(403);
         }
 
-        $reservation->load(['car', 'user']);
+        $reservation->load(['car', 'user', 'payments' => function ($query) {
+            $query->latest();
+        }]);
 
         return view('reservations.show', compact('reservation'));
     }
@@ -119,9 +125,13 @@ class ReservationController extends Controller
             return back()->with('error', 'This reservation cannot be cancelled.');
         }
 
+        if ($reservation->rental && $reservation->rental->status === 'active' && $reservation->rental->actual_start_date === null) {
+            $reservation->rental->delete();
+        }
+
         $reservation->update([
             'status' => 'cancelled',
-            'notes' => $reservation->notes . "\n[Cancelled by user on " . now() . "]",
+            'notes' => $this->appendNote($reservation->notes, '[Cancelled by user on ' . now()->toDayDateTimeString() . ']'),
         ]);
 
         return redirect()->route('reservations.index')
@@ -135,7 +145,11 @@ class ReservationController extends Controller
     {
         $this->authorize('viewAny', Reservation::class);
 
-        $query = Reservation::with(['car', 'user']);
+        $query = Reservation::with([
+            'car',
+            'user',
+            'payments' => fn ($q) => $q->latest(),
+        ]);
 
         if ($request->filled('search')) {
             $search = $request->search;
@@ -179,7 +193,23 @@ class ReservationController extends Controller
             'notes' => 'nullable|string',
         ]);
 
-        $reservation->update($validated);
+        if ($validated['status'] === 'confirmed' && $reservation->payment_status !== 'paid') {
+            return back()->with('error', 'Approve the payment before confirming this reservation.');
+        }
+
+        $updatePayload = [
+            'status' => $validated['status'],
+            'notes' => $validated['notes'] ?? $reservation->notes,
+        ];
+
+        if ($validated['status'] === 'confirmed') {
+            $this->ensureRentalExists($reservation, auth()->id());
+        }
+        if ($validated['status'] === 'cancelled' && $reservation->rental && $reservation->rental->actual_start_date === null) {
+            $reservation->rental->delete();
+        }
+
+        $reservation->update($updatePayload);
 
         return back()->with('success', 'Reservation status updated successfully.');
     }
@@ -195,27 +225,16 @@ class ReservationController extends Controller
             return back()->with('error', 'This reservation cannot be converted to a rental.');
         }
 
-        // Create rental from reservation
-        $rental = Rental::create([
-            'reservation_id' => $reservation->id,
-            'user_id' => $reservation->user_id,
-            'car_id' => $reservation->car_id,
-            'start_date' => $reservation->start_date,
-            'end_date' => $reservation->end_date,
-            'actual_start_date' => now(),
-            'pickup_location' => $reservation->pickup_location,
-            'return_location' => $reservation->return_location,
-            'total_amount' => $reservation->total_amount,
-            'deposit_amount' => 0, // Default deposit
-            'status' => 'active',
-            'notes' => "Converted from reservation #{$reservation->id}",
-            'created_by' => auth()->id(),
-        ]);
+        if ($reservation->payment_status !== 'paid') {
+            return back()->with('error', 'Payment must be approved before converting to a rental.');
+        }
 
-        // Update reservation status
+        $rental = $this->ensureRentalExists($reservation, auth()->id(), true);
+
         $reservation->update([
             'status' => 'completed',
-            'notes' => $reservation->notes . "\n[Converted to rental #{$rental->id} on " . now() . "]",
+            'payment_status' => 'paid',
+            'notes' => $this->appendNote($reservation->notes, '[Converted to rental #' . $rental->id . ' on ' . now()->toDayDateTimeString() . ']'),
         ]);
 
         return redirect()->route('admin.rentals.index')
@@ -233,5 +252,109 @@ class ReservationController extends Controller
 
         return redirect()->route('admin.reservations.index')
             ->with('success', 'Reservation deleted successfully.');
+    }
+
+    /**
+     * Ensure a rental exists for the reservation.
+     */
+    protected function ensureRentalExists(Reservation $reservation, ?int $actorId = null, bool $setActualStart = false)
+    {
+        if ($reservation->rental) {
+            if ($setActualStart && !$reservation->rental->actual_start_date) {
+                $reservation->rental->update(['actual_start_date' => now()]);
+            }
+
+            return $reservation->rental;
+        }
+
+        return Rental::create([
+            'reservation_id' => $reservation->id,
+            'user_id' => $reservation->user_id,
+            'car_id' => $reservation->car_id,
+            'requires_driver' => $reservation->requires_driver,
+            'start_date' => $reservation->start_date,
+            'end_date' => $reservation->end_date,
+            'actual_start_date' => $setActualStart ? now() : null,
+            'pickup_location' => $reservation->pickup_location,
+            'return_location' => $reservation->return_location,
+            'total_amount' => $reservation->total_amount,
+            'deposit_amount' => 0,
+            'status' => 'active',
+            'notes' => $setActualStart
+                ? "Converted from reservation #{$reservation->id}"
+                : "Auto-generated from reservation #{$reservation->id}",
+            'created_by' => $actorId,
+        ]);
+    }
+
+    /**
+     * Helper to append audit notes safely.
+     */
+    protected function appendNote(?string $existing, string $line): string
+    {
+        $existing = trim((string) $existing);
+        $line = trim($line);
+
+        return $existing ? $existing . "\n" . $line : $line;
+    }
+
+    /**
+     * Admin: Approve a pending payment.
+     */
+    public function approvePayment(Reservation $reservation)
+    {
+        $this->authorize('update', $reservation);
+
+        if (!$reservation->payment_reference) {
+            return back()->with('error', 'No payment receipt has been submitted for this reservation.');
+        }
+
+        $latestPayment = $reservation->payments()->latest()->first();
+        if ($latestPayment) {
+            $latestPayment->update([
+                'status' => 'paid',
+                'paid_at' => now(),
+            ]);
+        }
+
+        $reservation->update([
+            'payment_status' => 'paid',
+        ]);
+
+        return back()->with('success', 'Payment approved successfully. You can now confirm the reservation.');
+    }
+
+    /**
+     * Admin: Reset payment verification to request a new receipt.
+     */
+    public function resetPayment(Request $request, Reservation $reservation)
+    {
+        $this->authorize('update', $reservation);
+
+        $data = $request->validate([
+            'reason' => 'nullable|string|max:500',
+        ]);
+
+        $latestPayment = $reservation->payments()->latest()->first();
+        if ($latestPayment) {
+            $latestPayment->update([
+                'status' => 'failed',
+                'meta' => array_merge($latestPayment->meta ?? [], [
+                    'admin_reason' => $data['reason'],
+                ]),
+            ]);
+        }
+
+        if ($reservation->payment_receipt_path && Storage::disk('public')->exists($reservation->payment_receipt_path)) {
+            Storage::disk('public')->delete($reservation->payment_receipt_path);
+        }
+
+        $reservation->update([
+            'payment_status' => 'pending',
+            'payment_reference' => null,
+            'payment_receipt_path' => null,
+        ]);
+
+        return back()->with('success', 'Payment receipt cleared. Ask the customer to upload a new proof of payment.');
     }
 }

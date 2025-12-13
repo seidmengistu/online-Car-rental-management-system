@@ -1,4 +1,5 @@
 @extends('layouts.admin')
+@php use Illuminate\Support\Str; @endphp
 
 @section('title', 'Booking Management')
 
@@ -46,6 +47,7 @@
                         <th>End Date</th>
                         <th>Total</th>
                         <th>Status</th>
+                        <th>Payment</th>
                         <th class="text-end">Actions</th>
                     </tr>
                 </thead>
@@ -67,6 +69,43 @@
                             }}">
                                 {{ ucfirst($reservation->status) }}
                             </span>
+                        </td>
+                        <td>
+                            @php
+                                $paymentBadge = match ($reservation->payment_status) {
+                                    'paid' => ['text' => 'Paid', 'class' => 'bg-success'],
+                                    'failed' => ['text' => 'Failed', 'class' => 'bg-danger'],
+                                    default => ['text' => $reservation->payment_reference ? 'Awaiting review' : 'Pending upload', 'class' => 'bg-warning'],
+                                };
+                                $latestPayment = $reservation->payments->first();
+                            @endphp
+                            <span class="badge {{ $paymentBadge['class'] }}">{{ $paymentBadge['text'] }}</span>
+                            @if($reservation->payment_reference)
+                                <div class="small text-muted mt-1">Ref: {{ Str::limit($reservation->payment_reference, 15) }}</div>
+                                <div class="d-flex flex-wrap gap-2 mt-2">
+                                    <a href="{{ route('reservations.receipt', $reservation) }}" target="_blank" class="btn btn-outline-secondary btn-sm">
+                                        <i class="bi bi-receipt"></i> Receipt
+                                    </a>
+                                    @if($reservation->payment_status !== 'paid')
+                                        <form action="{{ route('admin.reservations.payments.approve', $reservation) }}" method="POST">
+                                            @csrf
+                                            @method('PATCH')
+                                            <button type="submit" class="btn btn-outline-success btn-sm">
+                                                <i class="bi bi-check-circle"></i> Approve
+                                            </button>
+                                        </form>
+                                        <form action="{{ route('admin.reservations.payments.reset', $reservation) }}" method="POST">
+                                            @csrf
+                                            @method('PATCH')
+                                            <button type="submit" class="btn btn-outline-danger btn-sm" title="Request new receipt">
+                                                <i class="bi bi-arrow-counterclockwise"></i> Reset
+                                            </button>
+                                        </form>
+                                    @endif
+                                </div>
+                            @else
+                                <small class="text-muted">Awaiting customer receipt</small>
+                            @endif
                         </td>
                         <td class="text-end">
                             <div class="dropdown">

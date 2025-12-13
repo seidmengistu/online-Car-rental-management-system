@@ -1,34 +1,25 @@
 <!-- preloader -->
-<div class="loader-wrap">
-    <div class="preloader">
-        <div class="preloader-close">x</div>
-        <div id="handle-preloader" class="handle-preloader">
+<div class="loader-wrap" style="background: transparent !important;">
+    <div class="preloader" style="background: transparent !important;">
+        <div class="preloader-close" style="display: none;">x</div>
+        <div id="handle-preloader" class="handle-preloader" style="background: transparent !important;">
             <div class="animation-preloader">
-                <div class="spinner"></div>
-                <div class="txt-loading">
-                    <span data-text-preloader="C" class="letters-loading">
-                        C
-                    </span>
-                    <span data-text-preloader="a" class="letters-loading">
-                        a
-                    </span>
-                    <span data-text-preloader="r" class="letters-loading">
-                        r
-                    </span>
-                    <span data-text-preloader="o" class="letters-loading">
-                        o
-                    </span>
-                    <span data-text-preloader="l" class="letters-loading">
-                        l
-                    </span>
-                    <span data-text-preloader="a" class="letters-loading">
-                        a
-                    </span>
-                </div>
+                <div class="spinner" style="border-color: #d4a853 !important; border-top-color: transparent !important;"></div>
             </div>
         </div>
     </div>
 </div>
+<style>
+    .loader-wrap,
+    .preloader,
+    .handle-preloader {
+        background: transparent !important;
+    }
+    .spinner {
+        border: 4px solid #d4a853 !important;
+        border-top-color: transparent !important;
+    }
+</style>
 <!-- preloader end -->
 
 <!--Search Popup-->
@@ -106,19 +97,34 @@
                     </nav>
                 </div>
                 <div class="header_right_content">
-                    <div class="language-switcher">
-                        <div id="polyglotLanguageSwitcher">
-                            <form action="#">
-                                <select id="polyglot-language-options">
-                                    <option id="en" value="en" selected></option>
-                                    <option id="fr" value="fr"></option>
-                                    <option id="de" value="de"></option>
-                                    <option id="it" value="it"></option>
-                                    <option id="es" value="es"></option>
-                                </select>
-                            </form>
+                    <!-- Custom Language Switcher -->
+                    <div class="custom-language-switcher">
+                        <button class="lang-toggle" id="langToggle">
+                            <i class="fas fa-globe"></i>
+                            <span class="current-lang">English</span>
+                            <i class="fas fa-chevron-down arrow"></i>
+                        </button>
+                        <div class="lang-dropdown" id="langDropdown">
+                            <div class="lang-option" data-lang="en">
+                                <span class="lang-name">English</span>
+                                <i class="fas fa-check check-icon"></i>
+                            </div>
+                            <div class="lang-option" data-lang="am">
+                                <span class="lang-name">አማርኛ (Amharic)</span>
+                                <i class="fas fa-check check-icon"></i>
+                            </div>
+                            <div class="lang-option" data-lang="om">
+                                <span class="lang-name">Oromoo (Oromo)</span>
+                                <i class="fas fa-check check-icon"></i>
+                            </div>
+                            <div class="lang-option" data-lang="so">
+                                <span class="lang-name">Soomaali (Somali)</span>
+                                <i class="fas fa-check check-icon"></i>
+                            </div>
                         </div>
                     </div>
+                    <!-- Hidden Google Translate (for functionality) -->
+                    <div id="google_translate_landing" style="display: none;"></div>
                     <div class="link-btn">
                         @auth
                             <!-- Logged in user dropdown -->
