@@ -2,6 +2,13 @@
 
 @section('title', 'Return Rental')
 
+@section('breadcrumb')
+<span class="separator">/</span>
+<a href="{{ route('rentals.index') }}">Rentals</a>
+<span class="separator">/</span>
+<span class="current">Return Car</span>
+@endsection
+
 @section('content')
 <div class="container-fluid px-3 px-lg-4">
     <div class="row">

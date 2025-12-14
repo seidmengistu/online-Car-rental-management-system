@@ -1,6 +1,11 @@
 @extends('layouts.app')
 
-@section('title', 'Available Cars')
+@section('title', 'Browse Cars')
+
+@section('breadcrumb')
+<span class="separator">/</span>
+<span class="current">Browse Cars</span>
+@endsection
 
 @push('styles')
 <style>

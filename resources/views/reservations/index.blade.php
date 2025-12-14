@@ -2,6 +2,11 @@
 
 @section('title', 'My Reservations')
 
+@section('breadcrumb')
+<span class="separator">/</span>
+<span class="current">My Reservations</span>
+@endsection
+
 @push('styles')
 <style>
     .reservations-page {

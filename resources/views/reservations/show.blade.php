@@ -2,6 +2,13 @@
 
 @section('title', 'Reservation Details')
 
+@section('breadcrumb')
+<span class="separator">/</span>
+<a href="{{ route('reservations.index') }}">Reservations</a>
+<span class="separator">/</span>
+<span class="current">Reservation #{{ $reservation->id }}</span>
+@endsection
+
 @push('styles')
 <style>
     .reservation-hero {

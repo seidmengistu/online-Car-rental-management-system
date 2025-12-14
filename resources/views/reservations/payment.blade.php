@@ -2,6 +2,13 @@
 
 @section('title', 'Complete Payment')
 
+@section('breadcrumb')
+<span class="separator">/</span>
+<a href="{{ route('reservations.index') }}">Reservations</a>
+<span class="separator">/</span>
+<span class="current">Payment</span>
+@endsection
+
 @push('styles')
 <style>
     .payment-card {

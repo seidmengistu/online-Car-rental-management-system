@@ -2,6 +2,13 @@
 
 @section('title', $car->full_name)
 
+@section('breadcrumb')
+<span class="separator">/</span>
+<a href="{{ route('cars.index') }}">Cars</a>
+<span class="separator">/</span>
+<span class="current">{{ $car->make }} {{ $car->model }}</span>
+@endsection
+
 @push('styles')
 <style>
     .car-detail-page {

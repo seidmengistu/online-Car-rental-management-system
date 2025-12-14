@@ -243,6 +243,11 @@ class AdminController extends Controller
      */
     public function reports(Request $request)
     {
+        // Handle export requests
+        if ($request->filled('export')) {
+            return $this->handleExport($request->export);
+        }
+        
         // Basic stats
         $totalUsers = User::count();
         $totalCars = Car::count();
@@ -267,13 +272,6 @@ class AdminController extends Controller
             Reservation::where('status', 'completed')->count()
         ];
         
-        // Handle export requests
-        if ($request->filled('export')) {
-            // Here you would implement the export functionality
-            // For now, just redirect back with a message
-            return redirect()->back()->with('info', 'Export functionality coming soon!');
-        }
-        
         return view('admin.reports.index', compact(
             'totalUsers', 
             'totalCars', 
@@ -282,5 +280,259 @@ class AdminController extends Controller
             'monthlyRevenue',
             'reservationStatusCounts'
         ));
+    }
+    
+    /**
+     * Handle export requests
+     */
+    protected function handleExport(string $type)
+    {
+        $filename = $type . '_export_' . now()->format('Y-m-d_His') . '.csv';
+        
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => "attachment; filename=\"$filename\"",
+            'Pragma' => 'no-cache',
+            'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
+            'Expires' => '0',
+        ];
+        
+        $callback = match($type) {
+            'users' => $this->exportUsers(),
+            'cars' => $this->exportCars(),
+            'reservations' => $this->exportReservations(),
+            'rentals' => $this->exportRentals(),
+            default => null,
+        };
+        
+        if (!$callback) {
+            return redirect()->back()->with('error', 'Invalid export type.');
+        }
+        
+        return response()->stream($callback, 200, $headers);
+    }
+    
+    /**
+     * Export users to CSV
+     */
+    protected function exportUsers(): callable
+    {
+        return function () {
+            $file = fopen('php://output', 'w');
+            
+            // CSV Header
+            fputcsv($file, [
+                'ID',
+                'Name',
+                'Email',
+                'Phone',
+                'Role',
+                'Status',
+                'Address',
+                'City',
+                'State',
+                'ZIP Code',
+                'Country',
+                'Date of Birth',
+                'License Number',
+                'License Expiry',
+                'Created At',
+            ]);
+            
+            // Data rows
+            User::with('role')->chunk(100, function ($users) use ($file) {
+                foreach ($users as $user) {
+                    fputcsv($file, [
+                        $user->id,
+                        $user->name,
+                        $user->email,
+                        $user->phone,
+                        $user->role->display_name ?? 'N/A',
+                        $user->is_active ? 'Active' : 'Inactive',
+                        $user->address,
+                        $user->city,
+                        $user->state,
+                        $user->zip_code,
+                        $user->country,
+                        $user->date_of_birth?->format('Y-m-d'),
+                        $user->driving_license_number,
+                        $user->driving_license_expiry?->format('Y-m-d'),
+                        $user->created_at->format('Y-m-d H:i:s'),
+                    ]);
+                }
+            });
+            
+            fclose($file);
+        };
+    }
+    
+    /**
+     * Export cars to CSV
+     */
+    protected function exportCars(): callable
+    {
+        return function () {
+            $file = fopen('php://output', 'w');
+            
+            // CSV Header
+            fputcsv($file, [
+                'ID',
+                'Plate Number',
+                'Make',
+                'Model',
+                'Year',
+                'Color',
+                'Seats',
+                'Transmission',
+                'Fuel Type',
+                'Daily Rate',
+                'Weekly Rate',
+                'Monthly Rate',
+                'Status',
+                'Available',
+                'Mileage',
+                'Description',
+                'Created At',
+            ]);
+            
+            // Data rows
+            Car::chunk(100, function ($cars) use ($file) {
+                foreach ($cars as $car) {
+                    fputcsv($file, [
+                        $car->id,
+                        $car->plate_number,
+                        $car->make,
+                        $car->model,
+                        $car->year,
+                        $car->color,
+                        $car->seats,
+                        $car->transmission,
+                        $car->fuel_type,
+                        $car->daily_rate,
+                        $car->weekly_rate,
+                        $car->monthly_rate,
+                        $car->status ?? 'available',
+                        $car->is_available ? 'Yes' : 'No',
+                        $car->mileage,
+                        $car->description,
+                        $car->created_at->format('Y-m-d H:i:s'),
+                    ]);
+                }
+            });
+            
+            fclose($file);
+        };
+    }
+    
+    /**
+     * Export reservations to CSV
+     */
+    protected function exportReservations(): callable
+    {
+        return function () {
+            $file = fopen('php://output', 'w');
+            
+            // CSV Header
+            fputcsv($file, [
+                'ID',
+                'Customer Name',
+                'Customer Email',
+                'Car',
+                'Plate Number',
+                'Start Date',
+                'End Date',
+                'Total Days',
+                'Total Amount',
+                'Status',
+                'Payment Status',
+                'Payment Reference',
+                'Payment Method',
+                'Created At',
+            ]);
+            
+            // Data rows
+            Reservation::with(['user', 'car'])->chunk(100, function ($reservations) use ($file) {
+                foreach ($reservations as $reservation) {
+                    $days = $reservation->start_date->diffInDays($reservation->end_date) + 1;
+                    fputcsv($file, [
+                        $reservation->id,
+                        $reservation->user->name ?? 'N/A',
+                        $reservation->user->email ?? 'N/A',
+                        $reservation->car->full_name ?? 'N/A',
+                        $reservation->car->plate_number ?? 'N/A',
+                        $reservation->start_date->format('Y-m-d'),
+                        $reservation->end_date->format('Y-m-d'),
+                        $days,
+                        $reservation->total_amount,
+                        ucfirst($reservation->status),
+                        ucfirst($reservation->payment_status ?? 'pending'),
+                        $reservation->payment_reference,
+                        $reservation->payment_method,
+                        $reservation->created_at->format('Y-m-d H:i:s'),
+                    ]);
+                }
+            });
+            
+            fclose($file);
+        };
+    }
+    
+    /**
+     * Export rentals to CSV
+     */
+    protected function exportRentals(): callable
+    {
+        return function () {
+            $file = fopen('php://output', 'w');
+            
+            // CSV Header
+            fputcsv($file, [
+                'ID',
+                'Reservation ID',
+                'Customer Name',
+                'Customer Email',
+                'Car',
+                'Plate Number',
+                'Start Date',
+                'End Date',
+                'Actual End Date',
+                'Total Days',
+                'Total Amount',
+                'Status',
+                'Overdue Days',
+                'Overdue Fee',
+                'Overdue Payment Status',
+                'Return Verified At',
+                'Created At',
+            ]);
+            
+            // Data rows
+            Rental::with(['user', 'car', 'reservation'])->chunk(100, function ($rentals) use ($file) {
+                foreach ($rentals as $rental) {
+                    $days = $rental->start_date->diffInDays($rental->end_date) + 1;
+                    fputcsv($file, [
+                        $rental->id,
+                        $rental->reservation_id,
+                        $rental->user->name ?? 'N/A',
+                        $rental->user->email ?? 'N/A',
+                        $rental->car->full_name ?? 'N/A',
+                        $rental->car->plate_number ?? 'N/A',
+                        $rental->start_date->format('Y-m-d'),
+                        $rental->end_date->format('Y-m-d'),
+                        $rental->actual_end_date?->format('Y-m-d H:i:s'),
+                        $days,
+                        $rental->total_amount,
+                        ucfirst($rental->status),
+                        $rental->overdue_days ?? 0,
+                        $rental->overdue_fee ?? 0,
+                        ucfirst($rental->overdue_payment_status ?? 'not_required'),
+                        $rental->return_verified_at?->format('Y-m-d H:i:s'),
+                        $rental->created_at->format('Y-m-d H:i:s'),
+                    ]);
+                }
+            });
+            
+            fclose($file);
+        };
     }
 } 

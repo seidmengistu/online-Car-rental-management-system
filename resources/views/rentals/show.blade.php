@@ -2,6 +2,13 @@
 
 @section('title', 'Rental Details')
 
+@section('breadcrumb')
+<span class="separator">/</span>
+<a href="{{ route('rentals.index') }}">Rentals</a>
+<span class="separator">/</span>
+<span class="current">Rental #{{ $rental->id }}</span>
+@endsection
+
 @push('styles')
 <style>
     .rental-detail-page {

@@ -1,6 +1,13 @@
 @extends('layouts.app')
 
-@section('title', 'Create Reservation')
+@section('title', 'New Reservation')
+
+@section('breadcrumb')
+<span class="separator">/</span>
+<a href="{{ route('reservations.index') }}">Reservations</a>
+<span class="separator">/</span>
+<span class="current">New Reservation</span>
+@endsection
 
 @push('styles')
 <style>

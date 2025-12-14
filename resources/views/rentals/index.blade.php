@@ -2,6 +2,11 @@
 
 @section('title', 'My Rentals')
 
+@section('breadcrumb')
+<span class="separator">/</span>
+<span class="current">My Rentals</span>
+@endsection
+
 @push('styles')
 <style>
     .rentals-page {
