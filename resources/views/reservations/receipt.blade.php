@@ -24,7 +24,7 @@
                 <p style="margin:0;">Reference: {{ $payment->reference }}</p>
             </div>
             <div style="text-align:right;">
-                <strong>Carola Car Rental</strong><br>
+                <strong>EthioRental</strong><br>
                 Addis Ababa, Ethiopia
             </div>
         </div>
@@ -83,7 +83,7 @@
             </table>
         </div>
 
-        <p style="margin:0; font-size:0.85rem; color:#94a3b8;">Thank you for choosing Carola Car Rental. Please keep this receipt for your records.</p>
+        <p style="margin:0; font-size:0.85rem; color:#94a3b8;">Thank you for choosing EthioRental. Please keep this receipt for your records.</p>
     </div>
 </body>
 </html>

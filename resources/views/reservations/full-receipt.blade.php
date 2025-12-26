@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Carola Car Rental – Receipt</title>
+    <title>EthioRental – Receipt</title>
     <style>
         body { font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; margin: 0; padding: 2rem; background: #f5f6fb; color: #0f172a; }
         .receipt { background: #fff; border-radius: 1.25rem; padding: 2.5rem; box-shadow: 0 25px 60px rgba(15,23,42,0.08); max-width: 900px; margin: 0 auto; }
@@ -26,7 +26,7 @@
                 <p class="muted">Reference: {{ $payment->reference }}</p>
             </div>
             <div style="text-align:right;">
-                <strong>Carola Car Rental</strong><br>
+                <strong>EthioRental</strong><br>
                 Addis Ababa, Ethiopia<br>
                 support@carola.com
             </div>
@@ -134,7 +134,7 @@
         @endif
     </div>
 
-        <p class="muted" style="margin-top:1.5rem;">Thank you for choosing Carola Car Rental. Please keep this confirmation for your records.</p>
+        <p class="muted" style="margin-top:1.5rem;">Thank you for choosing EthioRental. Please keep this confirmation for your records.</p>
     </div>
 </body>
 </html>

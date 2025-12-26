@@ -2,11 +2,11 @@
 <html lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>@yield('title', 'Carola Car Rental')</title>
+    <title>@yield('title', 'EthioRental')</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="title" content="Carola Car Rental" />
-    <meta name="author" content="Carola Car Rental" />
-    <meta name="description" content="Carola Car Rental System" />
+    <meta name="title" content="EthioRental" />
+    <meta name="author" content="EthioRental" />
+    <meta name="description" content="EthioRental System" />
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -902,7 +902,7 @@
         <div class="sidebar-brand-icon">
           <i class="bi bi-car-front"></i>
         </div>
-        <div class="sidebar-brand-text">Carola<span>Rental</span></div>
+        <div class="sidebar-brand-text">Ethio<span>Rental</span></div>
       </div>
 
       <nav class="sidebar-menu">
@@ -1099,7 +1099,7 @@
 
     <!-- Footer -->
     <footer class="customer-footer">
-      <div>© {{ date('Y') }} <a href="{{ route('home') }}">Carola Car Rental</a>. All rights reserved.</div>
+      <div>© {{ date('Y') }} <a href="{{ route('home') }}">EthioRental</a>. All rights reserved.</div>
       <div>Customer Portal</div>
     </footer>
 

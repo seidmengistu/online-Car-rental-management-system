@@ -2,11 +2,11 @@
 <html lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>@yield('title', 'Admin Dashboard') - Carola Car Rental</title>
+    <title>@yield('title', 'Admin Dashboard') - EthioRental</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="title" content="Carola Car Rental | Admin Dashboard" />
-    <meta name="author" content="Carola Car Rental" />
-    <meta name="description" content="Admin dashboard for Carola Car Rental system" />
+    <meta name="title" content="EthioRental | Admin Dashboard" />
+    <meta name="author" content="EthioRental" />
+    <meta name="description" content="Admin dashboard for EthioRental system" />
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1289,7 +1289,7 @@
 
     <!-- Footer -->
     <footer class="admin-footer">
-      <div>© {{ date('Y') }} <a href="#">Carola Car Rental</a>. All rights reserved.</div>
+      <div>© {{ date('Y') }} <a href="#">EthioRental</a>. All rights reserved.</div>
       <div>Admin Panel v2.0</div>
     </footer>
 

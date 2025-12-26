@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>Carola Car Rental | Register</title>
+  <title>EthioRental | Register</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="title" content="Carola Car Rental | Register" />
-  <meta name="author" content="Carola Car Rental" />
-  <meta name="description" content="Register for Carola Car Rental system" />
+  <meta name="title" content="EthioRental | Register" />
+  <meta name="author" content="EthioRental" />
+  <meta name="description" content="Register for EthioRental system" />
   
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
