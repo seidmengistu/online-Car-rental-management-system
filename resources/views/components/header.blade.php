@@ -57,7 +57,7 @@
                 </div>
                 <div class="header-top-contact-info">
                     <ul>
-                        <li><i class="icon-22"></i><a href="#">+39-351-780-4756</a></li>
+                        <li><i class="icon-22"></i><a href="#">+251-911-123-456</a></li>
                         <li><i class="icon-23"></i><a href="#">info@carrental.com</a></li>
                     </ul>
                 </div>
