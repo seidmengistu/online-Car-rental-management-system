@@ -19,6 +19,16 @@
         border: 4px solid #d4a853 !important;
         border-top-color: transparent !important;
     }
+
+    /* Constrain logo height to prevent tall headers */
+    .main_header_logo img,
+    .sticky_header .main_header_logo img {
+        height: 64px;      /* slightly larger for visibility */
+        max-height: 64px;
+        width: auto;
+        object-fit: contain;
+        display: block;
+    }
 </style>
 <!-- preloader end -->
 

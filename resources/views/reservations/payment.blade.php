@@ -72,8 +72,8 @@
                     @if($reservation->payment_reference && $reservation->payment_status === 'pending')
                         <div class="alert alert-info">
                             <strong>Pending payment:</strong> We found a previous attempt (Ref {{ $reservation->payment_reference }}). You can restart checkout below.
-                        </div>
-                    @endif
+        </div>
+    @endif
                     <form method="POST" action="{{ route('reservations.payment.process', $reservation) }}">
                         @csrf
                         <div class="mt-4 d-grid gap-2">

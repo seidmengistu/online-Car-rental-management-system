@@ -92,7 +92,7 @@
                         <span class="text-muted text-uppercase small">Daily rate</span>
                         <p class="mb-0">ETB {{ number_format($rental->car->daily_rate, 2) }}</p>
                     </div>
-                        <div class="alert alert-light border">
+                    <div class="alert alert-light border">
                         <strong>Total paid:</strong> Br {{ number_format($rental->total_amount, 2) }}<br>
                         <strong>Potential overdue:</strong> {{ $overduePreviewDays > 0 ? 'Br ' . number_format($overduePreviewFee, 2) : 'None if returned today' }}
                     </div>

@@ -42,7 +42,7 @@
             </div>
         </div>
         <div class="footer-bottom-outer">
-            <div class="copyright">Copyright &copy; {{ date('Y') }} &nbsp;<a href="{{ route('home') }}">Carola</a> , Inc. All Rights Reserved</div>
+            <div class="copyright">Copyright &copy; {{ date('Y') }} &nbsp;<a href="{{ route('home') }}">Ethio-Rental</a> , Inc. All Rights Reserved</div>
         </div>
     </div>
 </footer>
