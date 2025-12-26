@@ -153,7 +153,7 @@
             </div>
           @endif
           <div class="car-price-badge">
-            <span>${{ number_format($car->daily_rate, 2) }}</span>
+            <span>Br {{ number_format($car->daily_rate, 2) }}</span>
             <small>/day</small>
           </div>
         </div>

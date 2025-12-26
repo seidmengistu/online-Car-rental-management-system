@@ -126,7 +126,7 @@
             </div>
             <div class="ms-auto text-end">
                 <small class="text-uppercase text-white-50">Total amount</small>
-                <h2 class="mb-0">${{ number_format($reservation->total_amount, 2) }}</h2>
+                <h2 class="mb-0">Br {{ number_format($reservation->total_amount, 2) }}</h2>
                 <small class="text-white-50">Created {{ $reservation->created_at->format('M d, Y H:i') }}</small>
             </div>
         </div>

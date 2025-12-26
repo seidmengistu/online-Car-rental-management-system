@@ -244,7 +244,7 @@
                         <div class="row text-center">
                             <div class="col-6">
                                 <div class="text-muted small">Daily Rate</div>
-                                <div class="fw-semibold">${{ number_format($car->daily_rate, 2) }}</div>
+                                <div class="fw-semibold">Br {{ number_format($car->daily_rate, 2) }}</div>
                             </div>
                             <div class="col-6">
                                 <div class="text-muted small">Plate</div>

@@ -75,7 +75,7 @@
             <div class="stat-card-icon">
                 <i class="bi bi-cash-coin"></i>
             </div>
-            <div class="stat-card-value">${{ number_format($monthlyStats->total_revenue ?? 0, 0) }}</div>
+            <div class="stat-card-value">Br {{ number_format($monthlyStats->total_revenue ?? 0, 0) }}</div>
             <div class="stat-card-label">Total Revenue</div>
         </div>
     </div>
@@ -84,7 +84,7 @@
             <div class="stat-card-icon">
                 <i class="bi bi-calculator"></i>
             </div>
-            <div class="stat-card-value">${{ number_format($monthlyStats->avg_rental_amount ?? 0, 0) }}</div>
+            <div class="stat-card-value">Br {{ number_format($monthlyStats->avg_rental_amount ?? 0, 0) }}</div>
             <div class="stat-card-label">Average Rental Amount</div>
         </div>
     </div>
@@ -161,7 +161,7 @@
                             <td>
                                 <span class="modern-badge modern-badge-primary">{{ $car->rental_count }}</span>
                             </td>
-                            <td class="fw-semibold">${{ number_format($car->total_revenue, 2) }}</td>
+                            <td class="fw-semibold">Br {{ number_format($car->total_revenue, 2) }}</td>
                         </tr>
                         @empty
                         <tr>
@@ -209,7 +209,7 @@
                                     {{ ucfirst($rental->status) }}
                                 </span>
                             </td>
-                            <td class="fw-semibold">${{ number_format($rental->total_amount, 2) }}</td>
+                            <td class="fw-semibold">Br {{ number_format($rental->total_amount, 2) }}</td>
                         </tr>
                         @empty
                         <tr>

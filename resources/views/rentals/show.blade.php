@@ -132,9 +132,9 @@
             </div>
             <div class="ms-auto text-end">
                 <small class="text-uppercase text-white-50">Final amount</small>
-                <h2 class="mb-0">${{ number_format($rental->calculateFinalAmount(), 2) }}</h2>
+                <h2 class="mb-0">Br {{ number_format($rental->calculateFinalAmount(), 2) }}</h2>
                 @if($rental->additional_charges > 0)
-                    <small class="text-warning">Includes ${{ number_format($rental->additional_charges, 2) }} additional</small>
+                    <small class="text-warning">Includes Br {{ number_format($rental->additional_charges, 2) }} additional</small>
                 @endif
                 @if($rental->status === 'active')
                     <div class="mt-3">
@@ -189,7 +189,7 @@
                         </div>
                         <div class="info-chip">
                             <span>deposit</span>
-                            <strong>${{ number_format($rental->deposit_amount ?? 0, 2) }}</strong>
+                            <strong>Br {{ number_format($rental->deposit_amount ?? 0, 2) }}</strong>
                         </div>
                         <div class="info-chip">
                             <span>driver</span>
@@ -208,17 +208,17 @@
                     <div class="info-grid mb-3">
                         <div class="info-chip">
                             <span>base amount</span>
-                            <strong>${{ number_format($rental->total_amount, 2) }}</strong>
+                            <strong>Br {{ number_format($rental->total_amount, 2) }}</strong>
                         </div>
                         <div class="info-chip">
                             <span>additional charges</span>
                             <strong class="{{ $rental->additional_charges > 0 ? 'text-warning' : 'text-muted' }}">
-                                {{ $rental->additional_charges > 0 ? '$'.number_format($rental->additional_charges, 2) : '$0.00' }}
+                                {{ $rental->additional_charges > 0 ? 'Br '.number_format($rental->additional_charges, 2) : 'Br 0.00' }}
                             </strong>
                         </div>
                         <div class="info-chip">
                             <span>final amount</span>
-                            <strong class="text-success">${{ number_format($rental->calculateFinalAmount(), 2) }}</strong>
+                            <strong class="text-success">Br {{ number_format($rental->calculateFinalAmount(), 2) }}</strong>
                                             </div>
                                         </div>
                     @if($rental->notes)
@@ -330,7 +330,7 @@
                         </div>
                     </div>
                     <div class="alert alert-primary mt-3 mb-0">
-                        <strong>Daily rate:</strong> ${{ number_format($rental->car->daily_rate, 2) }}
+                        <strong>Daily rate:</strong> Br {{ number_format($rental->car->daily_rate, 2) }}
                                     </div>
                                 </div>
                             </div>

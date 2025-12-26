@@ -114,7 +114,7 @@
                         </div>
                     </td>
                     <td>
-                        <div class="fw-semibold text-dark">${{ number_format($car->daily_rate, 2) }}</div>
+                        <div class="fw-semibold text-dark">Br {{ number_format($car->daily_rate, 2) }}</div>
                         <div class="text-muted small">/day</div>
                     </td>
                     <td>

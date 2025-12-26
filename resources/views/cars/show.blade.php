@@ -270,7 +270,7 @@
                     <div class="col-sm-6">
                         <div class="metric-card">
                             <h6>Daily Rate</h6>
-                            <div class="metric-value">${{ number_format($car->daily_rate, 2) }}</div>
+                            <div class="metric-value">Br {{ number_format($car->daily_rate, 2) }}</div>
                             <small class="text-muted">Includes standard insurance & roadside support</small>
                         </div>
                                 </div>
@@ -279,10 +279,10 @@
                         <div class="metric-card">
                             <h6>Extended Plans</h6>
                             @if($car->weekly_rate)
-                                <div class="metric-value">${{ number_format($car->weekly_rate, 2) }}<span class="fs-6"> / week</span></div>
+                                <div class="metric-value">Br {{ number_format($car->weekly_rate, 2) }}<span class="fs-6"> / week</span></div>
                             @endif
                             @if($car->monthly_rate)
-                                <div class="text-muted fw-semibold mt-1">${{ number_format($car->monthly_rate, 2) }} / month</div>
+                                <div class="text-muted fw-semibold mt-1">Br {{ number_format($car->monthly_rate, 2) }} / month</div>
                             @endif
                             <small class="text-muted d-block mt-1">Ask about long-term discounts</small>
                         </div>

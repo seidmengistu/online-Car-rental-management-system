@@ -80,10 +80,10 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
+            'name' => ['required', 'regex:/^[A-Za-z ]+$/', 'max:255'],
             'email' => 'required|string|email|max:255|unique:users',
             'password' => ['required', 'confirmed', Password::defaults()],
-            'phone' => 'required|string|max:20',
+            'phone' => ['required', 'regex:/^09\\d{8}$/'],
             'address' => 'required|string|max:255',
             'city' => 'required|string|max:100',
             'state' => 'required|string|max:100',
@@ -155,8 +155,8 @@ class AuthController extends Controller
         $user = Auth::user();
 
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'phone' => 'required|string|max:20',
+            'name' => ['required', 'regex:/^[A-Za-z ]+$/', 'max:255'],
+            'phone' => ['required', 'regex:/^09\\d{8}$/'],
             'address' => 'required|string|max:255',
             'city' => 'required|string|max:100',
             'state' => 'required|string|max:100',

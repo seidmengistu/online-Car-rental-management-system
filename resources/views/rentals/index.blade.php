@@ -181,7 +181,7 @@
                 </div>
             <div class="text-lg-end">
                 <p class="mb-1 text-uppercase small text-white-50">Value of trips shown</p>
-                <h2 class="mb-0">${{ number_format($totalRentalAmount, 2) }}</h2>
+                <h2 class="mb-0">Br {{ number_format($totalRentalAmount, 2) }}</h2>
             </div>
         </div>
     </div>
@@ -269,9 +269,9 @@
                     </div>
                     <div class="text-lg-end">
                         <small class="text-uppercase text-muted">Total amount</small>
-                        <h4 class="mb-0 text-success">${{ number_format($rental->total_amount, 2) }}</h4>
+                        <h4 class="mb-0 text-success">Br {{ number_format($rental->total_amount, 2) }}</h4>
                         @if($rental->additional_charges > 0)
-                            <small class="text-warning">+${{ number_format($rental->additional_charges, 2) }} charges</small>
+                            <small class="text-warning">+Br {{ number_format($rental->additional_charges, 2) }} charges</small>
                         @endif
                     </div>
                                         </div>

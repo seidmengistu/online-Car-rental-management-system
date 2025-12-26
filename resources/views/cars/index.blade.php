@@ -571,7 +571,7 @@
                         {{ $car->is_available ? 'Available' : 'Unavailable' }}
                     </div>
                     <div class="car-price-tag">
-                        ${{ number_format($car->daily_rate, 2) }}
+                        Br {{ number_format($car->daily_rate, 2) }}
                         <small>/day</small>
                     </div>
                 </div>
@@ -624,18 +624,18 @@
                     <div class="car-rates">
                         <div class="rate-item">
                             <span class="rate-label">Daily</span>
-                            <span class="rate-value">${{ number_format($car->daily_rate, 2) }}</span>
+                            <span class="rate-value">Br {{ number_format($car->daily_rate, 2) }}</span>
                         </div>
                         @if($car->weekly_rate)
                         <div class="rate-item">
                             <span class="rate-label">Weekly</span>
-                            <span class="rate-value">${{ number_format($car->weekly_rate, 2) }}</span>
+                            <span class="rate-value">Br {{ number_format($car->weekly_rate, 2) }}</span>
                         </div>
                         @endif
                         @if($car->monthly_rate)
                         <div class="rate-item">
                             <span class="rate-label">Monthly</span>
-                            <span class="rate-value">${{ number_format($car->monthly_rate, 2) }}</span>
+                            <span class="rate-value">Br {{ number_format($car->monthly_rate, 2) }}</span>
                         </div>
                         @endif
                     </div>

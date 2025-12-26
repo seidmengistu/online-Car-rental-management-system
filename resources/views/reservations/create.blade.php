@@ -121,7 +121,7 @@
                                                     <option value="{{ $availableCar->id }}" 
                                                         {{ (old('car_id', $car->id ?? '') == $availableCar->id) ? 'selected' : '' }}
                                                         data-daily-rate="{{ $availableCar->daily_rate }}">
-                                            {{ $availableCar->full_name }} · ${{ number_format($availableCar->daily_rate, 2) }}/day
+                                            {{ $availableCar->full_name }} · Br {{ number_format($availableCar->daily_rate, 2) }}/day
                                                     </option>
                                                 @endforeach
                                             </select>

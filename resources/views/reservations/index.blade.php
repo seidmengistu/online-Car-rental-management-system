@@ -181,7 +181,7 @@
                 </div>
             <div class="text-lg-end">
                 <p class="mb-1 text-uppercase small text-white-50">Total spend this page</p>
-                <h2 class="mb-0">${{ number_format($totalSpent, 2) }}</h2>
+                <h2 class="mb-0">Br {{ number_format($totalSpent, 2) }}</h2>
             </div>
         </div>
     </div>
@@ -205,7 +205,7 @@
             <div class="stat-card">
                 <span>Average trip value</span>
                 <strong>
-                    {{ $reservationsCollection->count() ? '$'.number_format($totalSpent / max($reservationsCollection->count(),1), 2) : '—' }}
+                    {{ $reservationsCollection->count() ? 'Br '.number_format($totalSpent / max($reservationsCollection->count(),1), 2) : '—' }}
                 </strong>
                 <small class="text-muted">Based on visible results</small>
             </div>
@@ -273,7 +273,7 @@
                     <div class="text-lg-end">
                         <span class="{{ $paymentMeta['class'] }}">{{ $paymentMeta['label'] }}</span>
                         <small class="text-uppercase text-muted">Total amount</small>
-                        <h4 class="mb-0 text-success">${{ number_format($reservation->total_amount, 2) }}</h4>
+                        <h4 class="mb-0 text-success">Br {{ number_format($reservation->total_amount, 2) }}</h4>
                         <small class="text-muted">Booked {{ $reservation->created_at->format('M d, Y H:i') }}</small>
                     </div>
                 </div>

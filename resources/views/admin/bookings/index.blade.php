@@ -116,7 +116,7 @@
                         </div>
                     </td>
                     <td>
-                        <div class="fw-semibold text-dark">${{ number_format($reservation->total_amount, 2) }}</div>
+                        <div class="fw-semibold text-dark">Br {{ number_format($reservation->total_amount, 2) }}</div>
                     </td>
                     <td>
                         <span class="modern-badge modern-badge-{{ 

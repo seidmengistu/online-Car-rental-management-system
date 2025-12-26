@@ -66,7 +66,7 @@
             <table>
                 <tr>
                     <td class="label">Amount</td>
-                    <td class="value">${{ number_format($payment->amount, 2) }} ETB</td>
+                    <td class="value">Br {{ number_format($payment->amount, 2) }}</td>
                 </tr>
                 <tr>
                     <td class="label">Status</td>
