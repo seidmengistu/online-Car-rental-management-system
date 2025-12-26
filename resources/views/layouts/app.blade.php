@@ -228,6 +228,51 @@
         transition: var(--hover-transition);
       }
 
+      /* Collapsed sidebar (desktop & mobile) */
+      /* Collapsed (icon-only) sidebar */
+      body.sidebar-collapsed .customer-sidebar {
+        width: 80px;
+        transform: translateX(0);
+      }
+
+      body.sidebar-collapsed .customer-main {
+        margin-left: 80px;
+      }
+
+      body.sidebar-collapsed .customer-footer {
+        left: 80px;
+      }
+
+      body.sidebar-collapsed .sidebar-brand-text,
+      body.sidebar-collapsed .sidebar-menu-title,
+      body.sidebar-collapsed .sidebar-user-name,
+      body.sidebar-collapsed .sidebar-user-role {
+        display: none;
+      }
+
+      body.sidebar-collapsed .sidebar-nav {
+        align-items: center;
+      }
+
+      body.sidebar-collapsed .sidebar-nav-link {
+        justify-content: center;
+        padding: 12px;
+        gap: 0;
+        font-size: 0; /* hide text while keeping icons */
+      }
+
+      body.sidebar-collapsed .sidebar-nav-link .sidebar-nav-icon {
+        font-size: 18px;
+      }
+
+      body.sidebar-collapsed .sidebar-user {
+        padding: 14px;
+      }
+
+      body.sidebar-collapsed .sidebar-user-avatar {
+        margin: 0 auto;
+      }
+
       /* Header */
       .customer-header {
         height: var(--header-height);
@@ -236,7 +281,7 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 0 32px;
+        padding: 0 24px;
         position: sticky;
         top: 0;
         z-index: 100;
@@ -246,24 +291,32 @@
       .header-left {
         display: flex;
         align-items: center;
-        gap: 24px;
+        gap: 12px;
       }
 
       .sidebar-toggle {
-        display: none;
-        width: 40px;
-        height: 40px;
-        border: none;
-        background: #f1f5f9;
-        border-radius: 10px;
+        display: flex;
+        width: 42px;
+        height: 42px;
+        border: 1px solid #e2e8f0;
+        background: #f8fafc;
+        border-radius: 12px;
         cursor: pointer;
         font-size: 20px;
-        color: #475569;
+        color: #334155;
         transition: var(--hover-transition);
+        align-items: center;
+        justify-content: center;
+        box-shadow: none;
       }
 
       .sidebar-toggle:hover {
-        background: #e2e8f0;
+        background: #e7edf5;
+      }
+
+      .sidebar-toggle i {
+        display: inline-block;
+        line-height: 1;
       }
 
       .header-breadcrumb {
@@ -788,10 +841,6 @@
           left: 0;
         }
 
-        .sidebar-toggle {
-          display: flex;
-        }
-
         .sidebar-overlay {
           position: fixed;
           inset: 0;
@@ -1057,17 +1106,19 @@
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-      // Sidebar Toggle
+      // Sidebar Toggle (icon-only collapse)
       const sidebar = document.getElementById('sidebar');
       const sidebarToggle = document.getElementById('sidebarToggle');
       const sidebarOverlay = document.getElementById('sidebarOverlay');
 
       sidebarToggle?.addEventListener('click', () => {
-        sidebar.classList.toggle('show');
-        sidebarOverlay.classList.toggle('show');
+        document.body.classList.toggle('sidebar-collapsed');
+        sidebar.classList.remove('show');
+        sidebarOverlay.classList.remove('show');
       });
 
       sidebarOverlay?.addEventListener('click', () => {
+        document.body.classList.add('sidebar-collapsed');
         sidebar.classList.remove('show');
         sidebarOverlay.classList.remove('show');
       });
