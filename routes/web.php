@@ -17,6 +17,9 @@ Route::get('/gallery', [HomeController::class, 'gallery'])->name('gallery');
 Route::get('/blog', [HomeController::class, 'blog'])->name('blog');
 Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
 
+// Payment callbacks
+Route::match(['get', 'post'], '/payments/chapa/callback', [PaymentController::class, 'chapaCallback'])->name('payments.chapa.callback');
+
 // Car browsing (public - no login required)
 Route::get('/cars', [CarController::class, 'index'])->name('cars.index');
 Route::get('/cars/{car}', [CarController::class, 'show'])->name('cars.show');
@@ -62,6 +65,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/rentals/{rental}', [RentalController::class, 'show'])->name('rentals.show');
         Route::get('/rentals/{rental}/return', [RentalController::class, 'returnForm'])->name('rentals.return.form');
         Route::post('/rentals/{rental}/return', [RentalController::class, 'submitReturn'])->name('rentals.return.submit');
+        Route::post('/rentals/{rental}/overdue/checkout', [RentalController::class, 'startOverduePayment'])->name('rentals.overdue.checkout');
     });
 });
 

@@ -5,15 +5,22 @@ namespace App\Http\Controllers;
 use App\Models\Car;
 use App\Models\Rental;
 use App\Models\User;
+use App\Services\ChapaService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\Str;
 
 class RentalController extends Controller
 {
     use AuthorizesRequests;
+
+    public function __construct(private ChapaService $chapaService)
+    {
+    }
 
     /**
      * Display a listing of rentals for customers
@@ -186,13 +193,10 @@ class RentalController extends Controller
 
         $validated = $request->validate([
             'actual_end_date' => 'required|date|after_or_equal:' . $rental->start_date->format('Y-m-d'),
-            'overdue_payment_method' => 'nullable|in:telebirr,cbe,bank',
-            'overdue_payment_reference' => 'nullable|string|max:255',
-            'overdue_receipt_file' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:4096',
             'overdue_payment_notes' => 'nullable|string|max:500',
         ]);
 
-        $rental->loadMissing('car');
+        $rental->loadMissing('car', 'user');
 
         $actualEnd = $isActiveReturn || !$rental->actual_end_date
             ? Carbon::parse($validated['actual_end_date'])
@@ -202,27 +206,16 @@ class RentalController extends Controller
             : ($rental->overdue_fee > 0 ? max(1, (int) round($rental->overdue_fee / max(1, $rental->car->daily_rate))) : 0);
         $overdueFee = $isActiveReturn ? $overdueDays * $rental->car->daily_rate : $rental->overdue_fee;
 
-        if ($overdueFee > 0) {
-            $request->validate([
-                'overdue_payment_method' => 'required|in:telebirr,cbe,bank',
-                'overdue_payment_reference' => 'required|string|max:255',
-            ]);
-        }
-
-        $receiptPath = $rental->overdue_receipt_path;
-        if ($request->hasFile('overdue_receipt_file')) {
-            if ($receiptPath && Storage::disk('public')->exists($receiptPath)) {
-                Storage::disk('public')->delete($receiptPath);
-            }
-            $receiptPath = $request->file('overdue_receipt_file')->store('rental_overdue_receipts', 'public');
-        }
+        $overdueReference = $overdueFee > 0
+            ? ($rental->overdue_payment_reference ?: $this->chapaService->makeTxRef('FINE', $rental->id))
+            : null;
 
         $updatePayload = [
             'overdue_fee' => $overdueFee,
             'overdue_payment_status' => $overdueFee > 0 ? 'pending' : 'not_required',
-            'overdue_payment_method' => $overdueFee > 0 ? $request->overdue_payment_method : null,
-            'overdue_payment_reference' => $overdueFee > 0 ? $request->overdue_payment_reference : null,
-            'overdue_receipt_path' => $receiptPath,
+            'overdue_payment_method' => $overdueFee > 0 ? 'chapa' : null,
+            'overdue_payment_reference' => $overdueReference,
+            'overdue_receipt_path' => null,
             'overdue_payment_notes' => $request->overdue_payment_notes,
             'overdue_paid_at' => null,
             'return_verified_at' => null,
@@ -237,10 +230,99 @@ class RentalController extends Controller
 
         $rental->update($updatePayload);
 
+        if ($overdueFee > 0) {
+            $checkoutUrl = $this->startOverdueCheckout($rental);
+
+            if ($checkoutUrl) {
+                return redirect()->away($checkoutUrl);
+            }
+
+            return redirect()->route('rentals.show', $rental)
+                ->with('error', 'Return saved but we could not start Chapa checkout. Please try paying again.');
+        }
+
         return redirect()->route('rentals.show', $rental)
-            ->with('success', $overdueFee > 0
-                ? 'Return submitted. Your overdue payment will be reviewed shortly.'
-                : 'Return completed successfully.');
+            ->with('success', 'Return completed successfully.');
+    }
+
+    /**
+     * Customer: start or restart Chapa checkout for overdue payments.
+     */
+    public function startOverduePayment(Rental $rental)
+    {
+        $this->authorize('returnAsCustomer', $rental);
+
+        if ($rental->overdue_fee <= 0) {
+            return back()->with('info', 'No overdue fee to pay.');
+        }
+
+        if ($rental->overdue_payment_status === 'paid') {
+            return back()->with('info', 'Overdue payment already marked as paid.');
+        }
+
+        $rental->loadMissing('car', 'user');
+
+        $checkoutUrl = $this->startOverdueCheckout($rental);
+
+        if ($checkoutUrl) {
+            return redirect()->away($checkoutUrl);
+        }
+
+        return back()->with('error', 'Could not start Chapa payment. Please try again.');
+    }
+
+    /**
+     * Build a Chapa checkout session for overdue amounts.
+     */
+    protected function startOverdueCheckout(Rental $rental): ?string
+    {
+        if ($rental->overdue_fee <= 0) {
+            return null;
+        }
+
+        $txRef = $rental->overdue_payment_reference ?: $this->chapaService->makeTxRef('FINE', $rental->id);
+
+        if (!$rental->overdue_payment_reference) {
+            $rental->update([
+                'overdue_payment_reference' => $txRef,
+                'overdue_payment_method' => 'chapa',
+                'overdue_payment_status' => 'pending',
+            ]);
+        }
+
+        $init = $this->chapaService->initialize([
+            'amount' => number_format($rental->overdue_fee, 2, '.', ''),
+            'currency' => 'ETB',
+            'email' => filter_var($rental->user->email ?? auth()->user()->email ?? '', FILTER_VALIDATE_EMAIL)
+                ? ($rental->user->email ?? auth()->user()->email)
+                : 'test@example.com',
+            'first_name' => Str::before($rental->user->name ?? auth()->user()->name ?? 'Customer Rental', ' ') ?: 'Customer',
+            'last_name' => Str::after($rental->user->name ?? auth()->user()->name ?? 'Customer Rental', ' ') ?: 'Rental',
+            'tx_ref' => $txRef,
+            'callback_url' => route('payments.chapa.callback'),
+            'return_url' => route('rentals.show', $rental),
+            'customization' => [
+                'title' => 'Overdue Fee', // must be <= 16 chars
+                'description' => 'Rental ' . str_pad($rental->id, 5, '0', STR_PAD_LEFT) . ' overdue fee',
+            ],
+            'meta' => [
+                'rental_id' => $rental->id,
+                'user_id' => $rental->user_id,
+            ],
+        ]);
+
+        if ($init['ok'] && !empty($init['checkout_url'])) {
+            return $init['checkout_url'];
+        }
+
+        Log::error('Chapa init failed for overdue rental', [
+            'tx_ref' => $txRef,
+            'rental_id' => $rental->id,
+            'user_id' => $rental->user_id,
+            'response' => $init,
+        ]);
+
+        return null;
     }
 
     /**

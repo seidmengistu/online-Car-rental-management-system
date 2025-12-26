@@ -215,17 +215,17 @@
                                         </div>
                 <div class="card-body d-flex flex-column gap-3">
                     <p class="text-muted mb-0">
-                        Upload your Telebirr confirmation, CBE transfer slip, or bank branch receipt. Our team will verify it before confirming the reservation.
+                        Pay securely through Chapa. You'll be redirected to complete checkout and we'll confirm automatically once the payment succeeds.
                     </p>
                     <div class="info-chip">
                         <span>Amount</span>
-                        <strong>${{ number_format($reservation->total_amount, 2) }}</strong>
+                        <strong>ETB {{ number_format($reservation->total_amount, 2) }}</strong>
                         <small class="text-muted">{{ strtoupper($reservation->payment_status) }}</small>
                                         </div>
                     <div class="info-chip">
-                        <span>Receipt reference</span>
+                        <span>Payment reference</span>
                         <strong>{{ $reservation->payment_reference ?? '—' }}</strong>
-                        <small class="text-muted">{{ $reservation->payment_reference ? 'Submitted by you' : 'Awaiting upload' }}</small>
+                        <small class="text-muted">{{ $reservation->payment_reference ? 'Chapa checkout ref' : 'Awaiting payment' }}</small>
                                     </div>
                     @if($reservation->payments->isNotEmpty())
                         @php $latestPayment = $reservation->payments->first(); @endphp
@@ -234,12 +234,7 @@
                                 <strong>{{ $latestPayment->provider }}</strong>
                                 <small>{{ optional($latestPayment->created_at)->format('M d, Y H:i') }}</small>
                             </div>
-                            <p class="mb-1 text-muted">Customer reference: {{ $latestPayment->meta['customer_reference'] ?? '-' }}</p>
-                            @if($latestPayment->receipt_path)
-                                <a href="{{ route('reservations.receipt', $reservation) }}" class="btn btn-outline-success btn-sm">
-                                    <i class="bi bi-receipt me-1"></i>Download uploaded receipt
-                                </a>
-                            @endif
+                            <p class="mb-1 text-muted">Tx Ref: {{ $latestPayment->reference }}</p>
                         </div>
                     @endif
                     @if($reservation->payment_status === 'paid')
@@ -248,11 +243,8 @@
                         </a>
                     @else
                         <a href="{{ route('reservations.payment', $reservation) }}" class="btn btn-primary w-100">
-                            <i class="bi bi-upload me-2"></i>Upload / update receipt
+                            <i class="bi bi-credit-card me-2"></i>Pay with Chapa
                         </a>
-                        @if($reservation->payment_reference)
-                            <small class="text-warning text-center">Receipt submitted · awaiting manual verification</small>
-                        @endif
                     @endif
                         </div>
                     </div>

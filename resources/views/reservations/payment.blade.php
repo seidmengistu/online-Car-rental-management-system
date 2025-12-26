@@ -54,8 +54,8 @@
                         <div class="row g-3">
                             <div class="col-md-4">
                                 <span class="text-muted text-uppercase small">Amount</span>
-                                <h4 class="mb-0">${{ number_format($reservation->total_amount, 2) }}</h4>
-                                <small class="text-muted">Charged in ETB</small>
+                                <h4 class="mb-0">ETB {{ number_format($reservation->total_amount, 2) }}</h4>
+                                <small class="text-muted">Processed securely via Chapa</small>
                             </div>
                             <div class="col-md-4">
                                 <span class="text-muted text-uppercase small">Vehicle</span>
@@ -69,53 +69,20 @@
                             </div>
                         </div>
                     </div>
-    @if($reservation->payment_reference)
-        <div class="alert alert-warning">
-            <strong>Receipt already submitted.</strong> Updating the form below will replace your previous submission.
-        </div>
-    @endif
-    <form method="POST" action="{{ route('reservations.payment.process', $reservation) }}" enctype="multipart/form-data">
+                    @if($reservation->payment_reference && $reservation->payment_status === 'pending')
+                        <div class="alert alert-info">
+                            <strong>Pending payment:</strong> We found a previous attempt (Ref {{ $reservation->payment_reference }}). You can restart checkout below.
+                        </div>
+                    @endif
+                    <form method="POST" action="{{ route('reservations.payment.process', $reservation) }}">
                         @csrf
-                        <div class="mb-3">
-            <label class="form-label fw-semibold">Payment method</label>
-            <div class="d-flex flex-wrap gap-3">
-                @foreach(['telebirr' => 'Telebirr', 'cbe' => 'CBE bank transfer', 'bank' => 'Other bank branch'] as $value => $label)
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="payment_method" id="method_{{ $value }}" value="{{ $value }}" {{ old('payment_method') === $value ? 'checked' : '' }} required>
-                        <label class="form-check-label" for="method_{{ $value }}">{{ $label }}</label>
-                    </div>
-                @endforeach
-            </div>
-            @error('payment_method')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
-                        </div>
-                        <div class="mb-3">
-            <label class="form-label fw-semibold">Receipt / transaction reference</label>
-            <input type="text" name="payment_reference" class="form-control @error('payment_reference') is-invalid @enderror" value="{{ old('payment_reference', $reservation->payment_reference) }}" placeholder="e.g., Telebirr Txn ID or deposit slip #" required>
-            @error('payment_reference')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                        </div>
-                        <div class="row g-3">
-                            <div class="col-md-4">
-                <label class="form-label fw-semibold">Upload receipt (optional)</label>
-                <input type="file" name="receipt_file" class="form-control @error('receipt_file') is-invalid @enderror" accept=".jpg,.jpeg,.png,.pdf">
-                @error('receipt_file')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                <small class="text-muted d-block">Attach Telebirr screenshot or stamped deposit slip.</small>
-                @if($reservation->payment_receipt_path)
-                    <a href="{{ route('reservations.receipt', $reservation) }}" target="_blank" class="btn btn-outline-secondary btn-sm mt-2">
-                        <i class="bi bi-eye me-1"></i> View current upload
-                    </a>
-                @endif
-            </div>
-            <div class="col-md-8">
-                <label class="form-label fw-semibold">Notes</label>
-                <textarea name="notes" class="form-control @error('notes') is-invalid @enderror" rows="3" placeholder="Add any helpful remarks">{{ old('notes') }}</textarea>
-                @error('notes')<div class="invalid-feedback">{{ $message }}</div>@enderror
-            </div>
-                        </div>
                         <div class="mt-4 d-grid gap-2">
                             <button type="submit" class="btn btn-primary btn-lg">
-                <i class="bi bi-upload"></i> Submit receipt
+                                <i class="bi bi-credit-card"></i> Pay with Chapa
                             </button>
-            <small class="text-muted text-center">You can visit any branch (Telebirr, CBE, or other banks) and upload the receipt here. Our team will verify it before confirming your booking.</small>
+                            <small class="text-muted text-center">
+                                You will be redirected to Chapa's secure checkout to complete your payment.
+                            </small>
                         </div>
                     </form>
                 </div>

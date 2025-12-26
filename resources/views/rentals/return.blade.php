@@ -56,26 +56,8 @@
                                 Returning today would {{ $overduePreviewDays > 0 ? 'add ETB ' . number_format($overduePreviewFee, 2) : 'not incur any overdue fee' }}.
                             @endif
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label fw-semibold">Payment method (only if overdue)</label>
-                            <select name="overdue_payment_method" class="form-select @error('overdue_payment_method') is-invalid @enderror">
-                                <option value="">Select a method</option>
-                                <option value="telebirr" {{ old('overdue_payment_method') == 'telebirr' ? 'selected' : '' }}>Telebirr</option>
-                                <option value="cbe" {{ old('overdue_payment_method') == 'cbe' ? 'selected' : '' }}>CBE bank transfer</option>
-                                <option value="bank" {{ old('overdue_payment_method') == 'bank' ? 'selected' : '' }}>Other bank branch</option>
-                            </select>
-                            @error('overdue_payment_method')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label fw-semibold">Payment reference</label>
-                            <input type="text" name="overdue_payment_reference" class="form-control @error('overdue_payment_reference') is-invalid @enderror" value="{{ old('overdue_payment_reference') }}" placeholder="Telebirr Txn ID or deposit slip #" >
-                            @error('overdue_payment_reference')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label fw-semibold">Upload receipt</label>
-                            <input type="file" name="overdue_receipt_file" class="form-control @error('overdue_receipt_file') is-invalid @enderror" accept=".jpg,.jpeg,.png,.pdf">
-                            @error('overdue_receipt_file')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                            <small class="text-muted">Attach Telebirr screenshot or stamped deposit slip (optional but recommended).</small>
+                        <div class="alert alert-secondary">
+                            Payments for any overdue amount are handled through Chapa. After submitting this form, you'll be redirected to complete checkout if a fee is due.
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Notes</label>
@@ -84,7 +66,7 @@
                         </div>
                         <div class="d-grid">
                             <button type="submit" class="btn btn-primary btn-lg">
-                                <i class="bi bi-check2-circle me-2"></i>Submit return
+                                <i class="bi bi-check2-circle me-2"></i>Submit return &amp; pay with Chapa if needed
                             </button>
                         </div>
                     </form>

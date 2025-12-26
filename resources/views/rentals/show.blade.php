@@ -272,22 +272,20 @@
                         </div>
                         @if($rental->overdue_fee > 0)
                             <div class="mb-3">
-                                <p class="mb-1"><strong>Method:</strong> {{ $rental->overdue_payment_method ? ucfirst(str_replace('_',' ', $rental->overdue_payment_method)) : '—' }}</p>
+                                <p class="mb-1"><strong>Method:</strong> {{ $rental->overdue_payment_method ? ucfirst(str_replace('_',' ', $rental->overdue_payment_method)) : 'Chapa checkout' }}</p>
                                 <p class="mb-1"><strong>Reference:</strong> {{ $rental->overdue_payment_reference ?? '—' }}</p>
                                 @if($rental->overdue_payment_notes)
                                     <p class="mb-1 text-muted"><strong>Notes:</strong> {{ $rental->overdue_payment_notes }}</p>
                                 @endif
                                 </div>
                             <div class="d-flex flex-wrap gap-2">
-                                @if($rental->overdue_receipt_path)
-                                    <a href="{{ asset('storage/' . $rental->overdue_receipt_path) }}" target="_blank" class="btn btn-outline-secondary btn-sm">
-                                        <i class="bi bi-file-earmark-arrow-down me-1"></i>View uploaded receipt
-                                    </a>
-                                @endif
                                 @if($rental->overdue_payment_status === 'pending')
-                                    <a href="{{ route('rentals.return.form', $rental) }}" class="btn btn-outline-primary btn-sm">
-                                        <i class="bi bi-upload me-1"></i>Update receipt
-                                    </a>
+                                    <form method="POST" action="{{ route('rentals.overdue.checkout', $rental) }}">
+                                        @csrf
+                                        <button type="submit" class="btn btn-primary btn-sm">
+                                            <i class="bi bi-credit-card me-1"></i>Pay overdue with Chapa
+                                        </button>
+                                    </form>
                                 @endif
                                         </div>
                                     @endif
