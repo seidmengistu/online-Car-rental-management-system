@@ -24,6 +24,7 @@ class Reservation extends Model
         'payment_status',
         'payment_reference',
         'payment_receipt_path',
+        'driver_id',
     ];
 
     protected $casts = [
@@ -39,6 +40,14 @@ class Reservation extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get the assigned driver
+     */
+    public function driver()
+    {
+        return $this->belongsTo(Driver::class);
     }
 
     /**
@@ -95,8 +104,8 @@ class Reservation extends Model
      */
     public function canBeCancelled()
     {
-        return in_array($this->status, ['pending', 'confirmed']) && 
-               $this->start_date->isFuture();
+        return in_array($this->status, ['pending', 'confirmed']) &&
+            $this->start_date->isFuture();
     }
 
     /**
@@ -131,4 +140,4 @@ class Reservation extends Model
     {
         return $query->where('user_id', $userId);
     }
-} 
+}

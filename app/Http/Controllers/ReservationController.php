@@ -382,4 +382,37 @@ class ReservationController extends Controller
 
         return back()->with('success', 'Payment receipt cleared. Ask the customer to upload a new proof of payment.');
     }
+    /**
+     * Admin: Assign driver to reservation
+     */
+    public function assignDriver(Request $request, Reservation $reservation)
+    {
+        $this->authorize('update', $reservation);
+
+        $request->validate([
+            'driver_id' => 'required|exists:drivers,id',
+        ]);
+
+        $driver = \App\Models\Driver::find($request->driver_id);
+
+        if ($driver->status !== 'active' && $driver->status !== 'on_trip') {
+            return back()->with('error', 'Selected driver is not active.');
+        }
+
+        $reservation->driver_id = $request->driver_id;
+        $reservation->requires_driver = true; // Ensure flag is set
+        $reservation->save();
+
+        // If reservation is already converted to rental, update rental too
+        if ($reservation->rental) {
+            $reservation->rental->driver_id = $request->driver_id;
+            $reservation->rental->requires_driver = true;
+            $reservation->rental->save();
+        }
+
+        // Notify Customer
+        $reservation->user->notify(new \App\Notifications\DriverAssigned($reservation, $driver));
+
+        return back()->with('success', 'Driver assigned successfully.');
+    }
 }

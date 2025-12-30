@@ -1177,6 +1177,13 @@
               Complaints
             </a>
           </li>
+          <li class="sidebar-nav-item">
+            <a href="{{ route('admin.drivers.index') }}"
+              class="sidebar-nav-link {{ request()->routeIs('admin.drivers.*') ? 'active' : '' }}">
+              <span class="sidebar-nav-icon"><i class="bi bi-person-badge"></i></span>
+              Drivers
+            </a>
+          </li>
         @endif
       </ul>
 
@@ -1488,7 +1495,7 @@
     document.addEventListener('DOMContentLoaded', () => {
       updateLanguageUI();
       hideGoogleTranslateBanner();
-    });
+  });
   </script>
   <script src="https://translate.google.com/translate_a/element.js?cb=initGoogleTranslateWidget"></script>
   @stack('scripts')

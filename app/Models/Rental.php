@@ -38,7 +38,9 @@ class Rental extends Model
         'overdue_paid_at',
         'return_verified_at',
         'return_verified_by',
+        'return_verified_by',
         'return_verification_notes',
+        'driver_id',
     ];
 
     protected $casts = [
@@ -61,6 +63,14 @@ class Rental extends Model
     public function reservation()
     {
         return $this->belongsTo(Reservation::class);
+    }
+
+    /**
+     * Get the assigned driver
+     */
+    public function driver()
+    {
+        return $this->belongsTo(Driver::class);
     }
 
     /**
@@ -168,7 +178,7 @@ class Rental extends Model
     public function scopeOverdue($query)
     {
         return $query->where('status', 'active')
-                    ->where('end_date', '<', now());
+            ->where('end_date', '<', now());
     }
 
     /**
@@ -178,4 +188,4 @@ class Rental extends Model
     {
         return $query->where('user_id', $userId);
     }
-} 
+}

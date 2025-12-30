@@ -10,6 +10,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ComplaintController;
 use App\Http\Controllers\Admin\AdminComplaintController;
+use App\Http\Controllers\Admin\AdminDriverController;
 
 // Public routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -110,6 +111,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::patch('/reservations/{reservation}/convert-to-rental', [ReservationController::class, 'convertToRental'])->name('reservations.convert-to-rental');
     Route::patch('/reservations/{reservation}/payments/approve', [ReservationController::class, 'approvePayment'])->name('reservations.payments.approve');
     Route::patch('/reservations/{reservation}/payments/reset', [ReservationController::class, 'resetPayment'])->name('reservations.payments.reset');
+    Route::patch('/reservations/{reservation}/assign-driver', [ReservationController::class, 'assignDriver'])->name('reservations.assign-driver');
     Route::delete('/reservations/{reservation}', [ReservationController::class, 'destroy'])->name('reservations.destroy');
 
     // Rental management
@@ -123,6 +125,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::delete('/rentals/{rental}', [RentalController::class, 'destroy'])->name('rentals.destroy');
     Route::get('/returns', [RentalController::class, 'returnManagement'])->name('returns.index');
     Route::patch('/returns/{rental}/approve', [RentalController::class, 'approveReturn'])->name('returns.approve');
+
+    // Driver management
+    Route::resource('drivers', AdminDriverController::class);
 });
 
 // Super Admin routes (Admin role only)
