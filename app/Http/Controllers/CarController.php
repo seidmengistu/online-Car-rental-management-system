@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Gate;
+use App\Models\ActivityLog;
 
 class CarController extends Controller
 {
@@ -17,65 +18,65 @@ class CarController extends Controller
     public function index(Request $request)
     {
         $query = Car::query();
-        
+
         // Filter by availability
         if ($request->filled('available')) {
             $query->where('is_available', true);
         }
-        
+
         // Filter by make
         if ($request->filled('make')) {
             $query->where('make', $request->make);
         }
-        
+
         // Filter by model
         if ($request->filled('model')) {
             $query->where('model', 'like', "%{$request->model}%");
         }
-        
+
         // Filter by fuel type
         if ($request->filled('fuel_type')) {
             $query->where('fuel_type', $request->fuel_type);
         }
-        
+
         // Filter by transmission
         if ($request->filled('transmission')) {
             $query->where('transmission', $request->transmission);
         }
-        
+
         // Filter by seats
         if ($request->filled('seats_min')) {
             $query->where('seats', '>=', $request->seats_min);
         }
-        
+
         // Filter by price range
         if ($request->filled('price_min')) {
             $query->where('daily_rate', '>=', $request->price_min);
         }
-        
+
         if ($request->filled('price_max')) {
             $query->where('daily_rate', '<=', $request->price_max);
         }
-        
+
         // Search
         if ($request->filled('search')) {
             $search = $request->search;
-            $query->where(function($q) use ($search) {
+            $query->where(function ($q) use ($search) {
                 $q->where('make', 'like', "%{$search}%")
-                  ->orWhere('model', 'like', "%{$search}%")
-                  ->orWhere('description', 'like', "%{$search}%");
+                    ->orWhere('model', 'like', "%{$search}%")
+                    ->orWhere('description', 'like', "%{$search}%");
             });
         }
-        
+
         $cars = $query->where('is_available', true)
-                     ->orderBy('make')
-                     ->paginate(12);
-        
+            ->orderBy('make')
+            ->paginate(12);
+
         // Get unique makes and fuel types for filters
         $makes = Car::select('make')->distinct()->pluck('make');
         $fuelTypes = Car::select('fuel_type')->distinct()->pluck('fuel_type');
         $transmissions = Car::select('transmission')->distinct()->pluck('transmission');
-        
+
         return view('cars.index', compact('cars', 'makes', 'fuelTypes', 'transmissions'));
     }
 
@@ -84,11 +85,14 @@ class CarController extends Controller
      */
     public function show(Car $car)
     {
-        $car->load(['reservations' => function ($query) {
-            $query->where('status', '!=', 'cancelled');
-        }, 'rentals' => function ($query) {
-            $query->where('status', '!=', 'returned');
-        }]);
+        $car->load([
+            'reservations' => function ($query) {
+                $query->where('status', '!=', 'cancelled');
+            },
+            'rentals' => function ($query) {
+                $query->where('status', '!=', 'returned');
+            }
+        ]);
 
         return view('cars.show', compact('car'));
     }
@@ -101,7 +105,7 @@ class CarController extends Controller
         if (!Auth::user()->isAdmin()) {
             abort(403, 'Unauthorized action.');
         }
-        
+
         return view('admin.cars.create');
     }
 
@@ -113,7 +117,7 @@ class CarController extends Controller
         if (!Auth::user()->isAdmin()) {
             abort(403, 'Unauthorized action.');
         }
-        
+
         $validated = $request->validate([
             'plate_number' => 'required|string|max:20|unique:cars',
             'make' => 'required|string|max:50',
@@ -133,24 +137,26 @@ class CarController extends Controller
             'features' => 'nullable|array',
             'is_available' => 'boolean',
         ]);
-        
+
         // Handle image upload
         if ($request->hasFile('image')) {
             $validated['image'] = $request->file('image')->store('cars', 'public');
         }
-        
+
         // Set default rates if not provided
         if (!isset($validated['weekly_rate'])) {
             $validated['weekly_rate'] = $validated['daily_rate'] * 6; // 1 day free for weekly
         }
-        
+
         if (!isset($validated['monthly_rate'])) {
             $validated['monthly_rate'] = $validated['daily_rate'] * 25; // 5 days free for monthly
         }
-        
+
         // Create car
         $car = Car::create($validated);
-        
+
+        ActivityLog::log('car_create', "Created car: {$car->make} {$car->model} ({$car->plate_number})", $car);
+
         return redirect()->route('admin.cars.index')
             ->with('success', 'Car created successfully!');
     }
@@ -163,7 +169,7 @@ class CarController extends Controller
         if (!Auth::user()->isAdmin()) {
             abort(403, 'Unauthorized action.');
         }
-        
+
         return view('admin.cars.edit', compact('car'));
     }
 
@@ -175,7 +181,7 @@ class CarController extends Controller
         if (!Auth::user()->isAdmin()) {
             abort(403, 'Unauthorized action.');
         }
-        
+
         $validated = $request->validate([
             'plate_number' => 'required|string|max:20|unique:cars,plate_number,' . $car->id,
             'make' => 'required|string|max:50',
@@ -195,29 +201,31 @@ class CarController extends Controller
             'features' => 'nullable|array',
             'is_available' => 'boolean',
         ]);
-        
+
         // Handle image upload
         if ($request->hasFile('image')) {
             // Delete old image if exists
             if ($car->image) {
                 Storage::disk('public')->delete($car->image);
             }
-            
+
             $validated['image'] = $request->file('image')->store('cars', 'public');
         }
-        
+
         // Set default rates if not provided
         if (!isset($validated['weekly_rate'])) {
             $validated['weekly_rate'] = $validated['daily_rate'] * 6; // 1 day free for weekly
         }
-        
+
         if (!isset($validated['monthly_rate'])) {
             $validated['monthly_rate'] = $validated['daily_rate'] * 25; // 5 days free for monthly
         }
-        
+
         // Update car
         $car->update($validated);
-        
+
+        ActivityLog::log('car_update', "Updated car: {$car->make} {$car->model} ({$car->plate_number})", $car);
+
         return redirect()->route('admin.cars.index')
             ->with('success', 'Car updated successfully!');
     }
@@ -230,19 +238,21 @@ class CarController extends Controller
         if (!Auth::user()->isAdmin()) {
             abort(403, 'Unauthorized action.');
         }
-        
+
         // Check if car is currently rented
         if ($car->rentals()->where('status', 'active')->exists()) {
             return back()->with('error', 'Cannot delete car that is currently rented.');
         }
-        
+
         // Delete image if exists
         if ($car->image) {
             Storage::disk('public')->delete($car->image);
         }
-        
+
         $car->delete();
-        
+
+        ActivityLog::log('car_delete', "Deleted car: {$car->make} {$car->model} ({$car->plate_number})", null);
+
         return redirect()->route('admin.cars.index')
             ->with('success', 'Car deleted successfully!');
     }
@@ -255,10 +265,12 @@ class CarController extends Controller
         if (!Auth::user()->isAdmin()) {
             abort(403, 'Unauthorized action.');
         }
-        
+
         $car->update(['is_available' => !$car->is_available]);
-        
+
         $status = $car->is_available ? 'available' : 'unavailable';
+        ActivityLog::log('car_status_update', "Car {$car->plate_number} marked as {$status}", $car);
+
         return back()->with('success', "Car marked as {$status} successfully!");
     }
 
@@ -270,27 +282,27 @@ class CarController extends Controller
         if (!Auth::user()->isAdmin()) {
             abort(403, 'Unauthorized action.');
         }
-        
+
         $query = Car::query();
-        
+
         // Search functionality
         if ($request->filled('search')) {
             $search = $request->search;
-            $query->where(function($q) use ($search) {
+            $query->where(function ($q) use ($search) {
                 $q->where('make', 'like', "%{$search}%")
-                  ->orWhere('model', 'like', "%{$search}%")
-                  ->orWhere('plate_number', 'like', "%{$search}%")
-                  ->orWhere('description', 'like', "%{$search}%");
+                    ->orWhere('model', 'like', "%{$search}%")
+                    ->orWhere('plate_number', 'like', "%{$search}%")
+                    ->orWhere('description', 'like', "%{$search}%");
             });
         }
-        
+
         // Filter by availability
         if ($request->filled('available')) {
             $query->where('is_available', $request->available == 'yes');
         }
-        
+
         $cars = $query->orderBy('make')->paginate(15);
-        
+
         return view('admin.cars.index', compact('cars'));
     }
 }

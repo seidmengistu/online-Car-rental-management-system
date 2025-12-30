@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use App\Models\ActivityLog;
 
 class ReservationController extends Controller
 {
@@ -67,7 +68,7 @@ class ReservationController extends Controller
         // Check if car is available for the selected dates
         if (!$car->isAvailableForDates($validated['start_date'], $validated['end_date'])) {
             return back()->withErrors(['car_id' => 'This car is not available for the selected dates.'])
-                        ->withInput();
+                ->withInput();
         }
 
         // Calculate total amount
@@ -89,6 +90,19 @@ class ReservationController extends Controller
             'payment_status' => 'pending',
         ]);
 
+        // Log activity
+        ActivityLog::log('reservation_created', "Created booking #{$reservation->id} for {$car->name} ({$days} days, \${$totalAmount})", $reservation);
+
+        // Notify Admins
+        try {
+            $admins = \App\Models\User::whereHas('role', function ($query) {
+                $query->whereIn('name', ['admin', 'manager', 'staff']);
+            })->get();
+            \Illuminate\Support\Facades\Notification::send($admins, new \App\Notifications\NewBookingCreated($reservation));
+        } catch (\Exception $e) {
+            \Log::error('Notification error: ' . $e->getMessage());
+        }
+
         return redirect()->route('reservations.show', $reservation)
             ->with('success', 'Reservation created successfully! It will be reviewed by our staff.');
     }
@@ -103,9 +117,13 @@ class ReservationController extends Controller
             abort(403);
         }
 
-        $reservation->load(['car', 'user', 'payments' => function ($query) {
-            $query->latest();
-        }]);
+        $reservation->load([
+            'car',
+            'user',
+            'payments' => function ($query) {
+                $query->latest();
+            }
+        ]);
 
         return view('reservations.show', compact('reservation'));
     }
@@ -148,20 +166,20 @@ class ReservationController extends Controller
         $query = Reservation::with([
             'car',
             'user',
-            'payments' => fn ($q) => $q->latest(),
+            'payments' => fn($q) => $q->latest(),
         ]);
 
         if ($request->filled('search')) {
             $search = $request->search;
-            $query->whereHas('user', function($q) use ($search) {
+            $query->whereHas('user', function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('email', 'like', "%{$search}%");
+                    ->orWhere('email', 'like', "%{$search}%");
             })
-            ->orWhereHas('car', function($q) use ($search) {
-                $q->where('make', 'like', "%{$search}%")
-                  ->orWhere('model', 'like', "%{$search}%")
-                  ->orWhere('plate_number', 'like', "%{$search}%");
-            });
+                ->orWhereHas('car', function ($q) use ($search) {
+                    $q->where('make', 'like', "%{$search}%")
+                        ->orWhere('model', 'like', "%{$search}%")
+                        ->orWhere('plate_number', 'like', "%{$search}%");
+                });
         }
 
         if ($request->filled('status')) {
@@ -210,6 +228,13 @@ class ReservationController extends Controller
         }
 
         $reservation->update($updatePayload);
+
+        // Notify User
+        try {
+            $reservation->user->notify(new \App\Notifications\BookingStatusUpdated($reservation, $validated['status']));
+        } catch (\Exception $e) {
+            \Log::error('Notification error: ' . $e->getMessage());
+        }
 
         return back()->with('success', 'Reservation status updated successfully.');
     }

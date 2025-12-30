@@ -93,6 +93,22 @@ class User extends Authenticatable
     }
 
     /**
+     * Get the complaints for this user.
+     */
+    public function complaints()
+    {
+        return $this->hasMany(Complaint::class);
+    }
+
+    /**
+     * Get the complaints resolved by this user.
+     */
+    public function resolvedComplaints()
+    {
+        return $this->hasMany(Complaint::class, 'resolved_by');
+    }
+
+    /**
      * Check if the user is a customer
      */
     public function isCustomer()
@@ -117,7 +133,15 @@ class User extends Authenticatable
     }
 
     /**
-     * Check if the user is admin (staff or manager)
+     * Check if the user is super admin
+     */
+    public function isSuperAdmin()
+    {
+        return $this->role && $this->role->isSuperAdmin();
+    }
+
+    /**
+     * Check if the user is admin (staff, manager, or admin)
      */
     public function isAdmin()
     {
@@ -169,7 +193,7 @@ class User extends Authenticatable
      */
     public function isDrivingLicenseExpiringSoon()
     {
-        return $this->driving_license_expiry && 
-               $this->driving_license_expiry->diffInDays(now()) <= 30;
+        return $this->driving_license_expiry &&
+            $this->driving_license_expiry->diffInDays(now()) <= 30;
     }
 }

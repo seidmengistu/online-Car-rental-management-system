@@ -53,12 +53,12 @@
             <div class="header-top-outer">
                 <div class="header-top-info">
                     <i class="far fa-clock"></i>
-                    <p>Open Hours: Mon - Fri 8.00 am - 6.00 pm</p>
+                    <p>Open Hours: Mon - Sun 02.00 - 12.00</p>
                 </div>
                 <div class="header-top-contact-info">
                     <ul>
-                        <li><i class="icon-22"></i><a href="#">+251-911-123-456</a></li>
-                        <li><i class="icon-23"></i><a href="#">info@carrental.com</a></li>
+                        <li><i class="icon-22"></i><a href="#">09-23-43-39-67</a></li>
+                        <li><i class="icon-23"></i><a href="#">info@zerihuncarrent.com</a></li>
                     </ul>
                 </div>
             </div>

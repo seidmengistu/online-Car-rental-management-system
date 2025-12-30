@@ -532,7 +532,7 @@
   
   <div class="register-container">
     <div class="logo-section">
-      <h1><span>Carola</span> Car Rental</h1>
+      <h1><span>Ethio</span> Car Rental</h1>
     </div>
 
     <div class="register-card">

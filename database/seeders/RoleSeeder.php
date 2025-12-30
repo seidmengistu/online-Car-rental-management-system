@@ -28,10 +28,18 @@ class RoleSeeder extends Seeder
                 'display_name' => 'Manager',
                 'description' => 'Managers with full system access and administrative privileges',
             ],
+            [
+                'name' => 'admin',
+                'display_name' => 'Administrator',
+                'description' => 'System administrators with user management and system settings access',
+            ],
         ];
 
         foreach ($roles as $role) {
-            Role::create($role);
+            Role::updateOrCreate(
+                ['name' => $role['name']],
+                $role
+            );
         }
     }
-} 
+}

@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Password;
+use App\Models\ActivityLog;
 
 class AdminController extends Controller
 {
@@ -21,13 +22,13 @@ class AdminController extends Controller
     public function dashboard()
     {
         $stats = [
-            'total_customers' => User::whereHas('role', function($query) {
+            'total_customers' => User::whereHas('role', function ($query) {
                 $query->where('name', 'customer');
             })->count(),
-            'total_staff' => User::whereHas('role', function($query) {
+            'total_staff' => User::whereHas('role', function ($query) {
                 $query->where('name', 'staff');
             })->count(),
-            'total_managers' => User::whereHas('role', function($query) {
+            'total_managers' => User::whereHas('role', function ($query) {
                 $query->where('name', 'manager');
             })->count(),
             'active_users' => User::where('is_active', true)->count(),
@@ -42,27 +43,27 @@ class AdminController extends Controller
     public function users(Request $request)
     {
         $query = User::with('role');
-        
+
         // Search functionality
         if ($request->filled('search')) {
             $search = $request->search;
-            $query->where(function($q) use ($search) {
+            $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('email', 'like', "%{$search}%")
-                  ->orWhere('phone', 'like', "%{$search}%");
+                    ->orWhere('email', 'like', "%{$search}%")
+                    ->orWhere('phone', 'like', "%{$search}%");
             });
         }
-        
+
         // Filter by role if provided
         if ($request->filled('role')) {
-            $query->whereHas('role', function($q) use ($request) {
+            $query->whereHas('role', function ($q) use ($request) {
                 $q->where('name', $request->role);
             });
         }
-        
+
         $users = $query->orderBy('created_at', 'desc')->paginate(15);
         $roles = Role::all();
-        
+
         return view('admin.users.index', compact('users', 'roles'));
     }
 
@@ -120,6 +121,8 @@ class AdminController extends Controller
             'is_active' => $request->has('is_active'),
         ]);
 
+        ActivityLog::log('user_create', "Created new user: {$user->name} ({$user->email})", $user);
+
         return redirect()->route('admin.users.index')
             ->with('success', 'User created successfully!');
     }
@@ -176,6 +179,8 @@ class AdminController extends Controller
             'is_active' => $request->has('is_active'),
         ]);
 
+        ActivityLog::log('user_update', "Updated user details for: {$user->name}", $user);
+
         return redirect()->route('admin.users.index')
             ->with('success', 'User updated successfully!');
     }
@@ -192,6 +197,8 @@ class AdminController extends Controller
         }
 
         $user->delete();
+
+        ActivityLog::log('user_delete', "Deleted user: {$user->name} ({$user->email})", null, ['deleted_user_id' => $user->id]);
 
         return redirect()->route('admin.users.index')
             ->with('success', 'User deleted successfully!');
@@ -211,6 +218,8 @@ class AdminController extends Controller
         $user->update(['is_active' => !$user->is_active]);
 
         $status = $user->is_active ? 'activated' : 'deactivated';
+        ActivityLog::log('user_status_update', "User {$user->name} was {$status}", $user);
+
         return redirect()->route('admin.users.index')
             ->with('success', "User {$status} successfully!");
     }
@@ -234,36 +243,49 @@ class AdminController extends Controller
             'password' => Hash::make($request->password)
         ]);
 
+        ActivityLog::log('user_password_reset', "Reset password for user: {$user->name}", $user);
+
         return redirect()->route('admin.users.index')
             ->with('success', 'User password reset successfully!');
     }
-    
+
     /**
      * Show reports page
      */
     public function reports(Request $request)
     {
+        // Check if user is super admin (should not see rental details)
+        $isSuperAdmin = auth()->user()->isSuperAdmin();
+
         // Handle export requests
         if ($request->filled('export')) {
+            // Prevent super admin from exporting rental data
+            if ($isSuperAdmin && in_array($request->export, ['rentals'])) {
+                return redirect()->back()->with('error', 'Access denied. Administrators cannot access rental data.');
+            }
             return $this->handleExport($request->export);
         }
-        
+
         // Basic stats
         $totalUsers = User::count();
         $totalCars = Car::count();
         $totalReservations = Reservation::count();
-        $totalRentals = Rental::count();
-        
-        // Monthly revenue data for chart
+
+        // Only show rental data to staff and managers, not super admin
+        $totalRentals = $isSuperAdmin ? null : Rental::count();
+
+        // Monthly revenue data for chart (only for staff/manager)
         $monthlyRevenue = [];
-        for ($i = 1; $i <= 12; $i++) {
-            $month = now()->setMonth($i)->startOfMonth();
-            $revenue = Rental::whereYear('created_at', now()->year)
-                ->whereMonth('created_at', $i)
-                ->sum('total_amount');
-            $monthlyRevenue[] = $revenue;
+        if (!$isSuperAdmin) {
+            for ($i = 1; $i <= 12; $i++) {
+                $month = now()->setMonth($i)->startOfMonth();
+                $revenue = Rental::whereYear('created_at', now()->year)
+                    ->whereMonth('created_at', $i)
+                    ->sum('total_amount');
+                $monthlyRevenue[] = $revenue;
+            }
         }
-        
+
         // Reservation status counts for pie chart
         $reservationStatusCounts = [
             Reservation::where('status', 'pending')->count(),
@@ -271,24 +293,25 @@ class AdminController extends Controller
             Reservation::where('status', 'cancelled')->count(),
             Reservation::where('status', 'completed')->count()
         ];
-        
+
         return view('admin.reports.index', compact(
-            'totalUsers', 
-            'totalCars', 
-            'totalReservations', 
+            'totalUsers',
+            'totalCars',
+            'totalReservations',
             'totalRentals',
             'monthlyRevenue',
-            'reservationStatusCounts'
+            'reservationStatusCounts',
+            'isSuperAdmin'
         ));
     }
-    
+
     /**
      * Handle export requests
      */
     protected function handleExport(string $type)
     {
         $filename = $type . '_export_' . now()->format('Y-m-d_His') . '.csv';
-        
+
         $headers = [
             'Content-Type' => 'text/csv',
             'Content-Disposition' => "attachment; filename=\"$filename\"",
@@ -296,22 +319,22 @@ class AdminController extends Controller
             'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
             'Expires' => '0',
         ];
-        
-        $callback = match($type) {
+
+        $callback = match ($type) {
             'users' => $this->exportUsers(),
             'cars' => $this->exportCars(),
             'reservations' => $this->exportReservations(),
             'rentals' => $this->exportRentals(),
             default => null,
         };
-        
+
         if (!$callback) {
             return redirect()->back()->with('error', 'Invalid export type.');
         }
-        
+
         return response()->stream($callback, 200, $headers);
     }
-    
+
     /**
      * Export users to CSV
      */
@@ -319,7 +342,7 @@ class AdminController extends Controller
     {
         return function () {
             $file = fopen('php://output', 'w');
-            
+
             // CSV Header
             fputcsv($file, [
                 'ID',
@@ -338,7 +361,7 @@ class AdminController extends Controller
                 'License Expiry',
                 'Created At',
             ]);
-            
+
             // Data rows
             User::with('role')->chunk(100, function ($users) use ($file) {
                 foreach ($users as $user) {
@@ -361,11 +384,11 @@ class AdminController extends Controller
                     ]);
                 }
             });
-            
+
             fclose($file);
         };
     }
-    
+
     /**
      * Export cars to CSV
      */
@@ -373,7 +396,7 @@ class AdminController extends Controller
     {
         return function () {
             $file = fopen('php://output', 'w');
-            
+
             // CSV Header
             fputcsv($file, [
                 'ID',
@@ -394,7 +417,7 @@ class AdminController extends Controller
                 'Description',
                 'Created At',
             ]);
-            
+
             // Data rows
             Car::chunk(100, function ($cars) use ($file) {
                 foreach ($cars as $car) {
@@ -419,11 +442,11 @@ class AdminController extends Controller
                     ]);
                 }
             });
-            
+
             fclose($file);
         };
     }
-    
+
     /**
      * Export reservations to CSV
      */
@@ -431,7 +454,7 @@ class AdminController extends Controller
     {
         return function () {
             $file = fopen('php://output', 'w');
-            
+
             // CSV Header
             fputcsv($file, [
                 'ID',
@@ -449,7 +472,7 @@ class AdminController extends Controller
                 'Payment Method',
                 'Created At',
             ]);
-            
+
             // Data rows
             Reservation::with(['user', 'car'])->chunk(100, function ($reservations) use ($file) {
                 foreach ($reservations as $reservation) {
@@ -472,11 +495,11 @@ class AdminController extends Controller
                     ]);
                 }
             });
-            
+
             fclose($file);
         };
     }
-    
+
     /**
      * Export rentals to CSV
      */
@@ -484,7 +507,7 @@ class AdminController extends Controller
     {
         return function () {
             $file = fopen('php://output', 'w');
-            
+
             // CSV Header
             fputcsv($file, [
                 'ID',
@@ -505,7 +528,7 @@ class AdminController extends Controller
                 'Return Verified At',
                 'Created At',
             ]);
-            
+
             // Data rows
             Rental::with(['user', 'car', 'reservation'])->chunk(100, function ($rentals) use ($file) {
                 foreach ($rentals as $rental) {
@@ -531,8 +554,8 @@ class AdminController extends Controller
                     ]);
                 }
             });
-            
+
             fclose($file);
         };
     }
-} 
+}

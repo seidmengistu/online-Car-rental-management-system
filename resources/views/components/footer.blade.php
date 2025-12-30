@@ -32,10 +32,10 @@
                 <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12">
                     <div class="footer_widget footer_contact_widget">
                         <h4 class="footer_widget_title">Contact</h4>
-                        <p>57 heold insaf Station Road, Cardiff, United Kingdom</p>
+                        <p>Medhanialem, Bole, Addis Ababa, Ethiopia</p>
                         <ul class="footer-info-list">
-                            <li><a href="mailto:info@example.com">info@example.com</a></li>
-                            <li><a href="tel:02920214012">029 2021 4012</a></li>
+                            <li><a href="mailto:info@zerihuncarrent.com">info@zerihuncarrent.com</a></li>
+                            <li><a href="tel:09-23-43-39-67">09-23-43-39-67</a></li>
                         </ul>
                     </div>
                 </div>

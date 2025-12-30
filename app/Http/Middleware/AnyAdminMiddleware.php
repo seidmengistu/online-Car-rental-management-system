@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class AdminMiddleware
+class AnyAdminMiddleware
 {
     /**
      * Handle an incoming request.
@@ -20,12 +20,10 @@ class AdminMiddleware
             return redirect()->route('login');
         }
 
-        $user = Auth::user();
-
-        // Allow staff and manager, but NOT super admin (admin role should use different routes)
-        if (!$user->isStaff() && !$user->isManager()) {
+        // Allow any admin role (Staff, Manager, or Admin)
+        if (!Auth::user()->isAdmin()) {
             return redirect()->route('dashboard')
-                ->with('error', 'Access denied. You do not have permission to access this area.');
+                ->with('error', 'Access denied. You do not have permission to access the admin area.');
         }
 
         return $next($request);

@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use App\Models\ActivityLog;
 use Illuminate\Validation\Rules\Password;
 
 class AuthController extends Controller
@@ -45,11 +46,14 @@ class AuthController extends Controller
 
             // Check if user is active
             if (!$user->is_active) {
+                ActivityLog::log('login_failed', 'User attempted to login but account is inactive: ' . $user->email);
                 Auth::logout();
                 return redirect()->back()
                     ->withErrors(['email' => 'Your account has been deactivated. Please contact support.'])
                     ->withInput($request->only('email'));
             }
+
+            ActivityLog::log('login', 'User logged in', $user);
 
             $request->session()->regenerate();
 
@@ -60,6 +64,8 @@ class AuthController extends Controller
                 return redirect()->intended('/dashboard');
             }
         }
+
+        ActivityLog::log('login_failed', 'Failed login attempt for email: ' . $request->email);
 
         return redirect()->back()
             ->withErrors(['email' => 'The provided credentials do not match our records.'])
@@ -122,6 +128,8 @@ class AuthController extends Controller
 
         Auth::login($user);
 
+        ActivityLog::log('register', 'New customer registered: ' . $user->name, $user);
+
         return redirect('/dashboard')->with('success', 'Account created successfully! Welcome to Carola Car Rental.');
     }
 
@@ -130,6 +138,11 @@ class AuthController extends Controller
      */
     public function logout(Request $request)
     {
+        $user = Auth::user();
+        if ($user) {
+            ActivityLog::log('logout', 'User logged out', $user);
+        }
+
         Auth::logout();
 
         $request->session()->invalidate();
@@ -144,6 +157,9 @@ class AuthController extends Controller
     public function profile()
     {
         $user = Auth::user();
+        if ($user->isAdmin()) {
+            return view('auth.profile', compact('user'));
+        }
         return view('auth.profile', compact('user'));
     }
 
@@ -173,9 +189,18 @@ class AuthController extends Controller
         }
 
         $user->update($request->only([
-            'name', 'phone', 'address', 'city', 'state', 
-            'zip_code', 'country', 'driving_license_number', 'driving_license_expiry'
+            'name',
+            'phone',
+            'address',
+            'city',
+            'state',
+            'zip_code',
+            'country',
+            'driving_license_number',
+            'driving_license_expiry'
         ]));
+
+        ActivityLog::log('profile_update', 'User updated profile details', $user);
 
         return redirect()->back()->with('success', 'Profile updated successfully!');
     }
@@ -201,6 +226,8 @@ class AuthController extends Controller
             'password' => Hash::make($request->password)
         ]);
 
+        ActivityLog::log('password_change', 'User changed password', $user);
+
         return redirect()->back()->with('success', 'Password changed successfully!');
     }
-} 
+}

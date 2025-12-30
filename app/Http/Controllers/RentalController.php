@@ -72,11 +72,11 @@ class RentalController extends Controller
             $query->where(function ($q) use ($search) {
                 $q->whereHas('car', function ($carQuery) use ($search) {
                     $carQuery->where('make', 'like', "%{$search}%")
-                             ->orWhere('model', 'like', "%{$search}%")
-                             ->orWhere('plate_number', 'like', "%{$search}%");
+                        ->orWhere('model', 'like', "%{$search}%")
+                        ->orWhere('plate_number', 'like', "%{$search}%");
                 })->orWhereHas('user', function ($userQuery) use ($search) {
                     $userQuery->where('name', 'like', "%{$search}%")
-                              ->orWhere('email', 'like', "%{$search}%");
+                        ->orWhere('email', 'like', "%{$search}%");
                 });
             });
         }
@@ -113,11 +113,11 @@ class RentalController extends Controller
             $baseQuery->where(function ($q) use ($search) {
                 $q->whereHas('car', function ($carQuery) use ($search) {
                     $carQuery->where('make', 'like', "%{$search}%")
-                             ->orWhere('model', 'like', "%{$search}%")
-                             ->orWhere('plate_number', 'like', "%{$search}%");
+                        ->orWhere('model', 'like', "%{$search}%")
+                        ->orWhere('plate_number', 'like', "%{$search}%");
                 })->orWhereHas('user', function ($userQuery) use ($search) {
                     $userQuery->where('name', 'like', "%{$search}%")
-                              ->orWhere('email', 'like', "%{$search}%");
+                        ->orWhere('email', 'like', "%{$search}%");
                 });
             });
         }
@@ -361,7 +361,7 @@ class RentalController extends Controller
         // Check if car is available for the selected dates
         if (!$car->isAvailableForDates($validated['start_date'], $validated['end_date'])) {
             return back()->withErrors(['car_id' => 'This car is not available for the selected dates.'])
-                        ->withInput();
+                ->withInput();
         }
 
         // Calculate total amount
@@ -474,6 +474,13 @@ class RentalController extends Controller
         ]);
 
         $rental->update($validated);
+
+        // Notify User
+        try {
+            $rental->user->notify(new \App\Notifications\RentalStatusUpdated($rental, $validated['status']));
+        } catch (\Exception $e) {
+            \Log::error('Notification error: ' . $e->getMessage());
+        }
 
         return back()->with('success', 'Rental status updated successfully.');
     }
@@ -591,12 +598,12 @@ class RentalController extends Controller
             COUNT(CASE WHEN status = "returned" THEN 1 END) as completed_rentals,
             COUNT(CASE WHEN status = "overdue" THEN 1 END) as overdue_rentals
         ')
-        ->whereYear('created_at', $year)
-        ->when($month !== 'all', function ($query) use ($month) {
-            return $query->whereYear('created_at', substr($month, 0, 4))
-                        ->whereMonth('created_at', substr($month, 5, 2));
-        })
-        ->first();
+            ->whereYear('created_at', $year)
+            ->when($month !== 'all', function ($query) use ($month) {
+                return $query->whereYear('created_at', substr($month, 0, 4))
+                    ->whereMonth('created_at', substr($month, 5, 2));
+            })
+            ->first();
 
         // Top rented cars
         $topCars = Rental::with('car')
@@ -604,7 +611,7 @@ class RentalController extends Controller
             ->whereYear('created_at', $year)
             ->when($month !== 'all', function ($query) use ($month) {
                 return $query->whereYear('created_at', substr($month, 0, 4))
-                            ->whereMonth('created_at', substr($month, 5, 2));
+                    ->whereMonth('created_at', substr($month, 5, 2));
             })
             ->groupBy('car_id')
             ->orderBy('rental_count', 'desc')

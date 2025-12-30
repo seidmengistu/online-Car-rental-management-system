@@ -48,10 +48,18 @@ class Role extends Model
     }
 
     /**
-     * Check if the role is admin (staff or manager)
+     * Check if the role is super admin
+     */
+    public function isSuperAdmin()
+    {
+        return $this->name === 'admin';
+    }
+
+    /**
+     * Check if the role is admin (staff, manager, or admin)
      */
     public function isAdmin()
     {
-        return in_array($this->name, ['staff', 'manager']);
+        return in_array($this->name, ['staff', 'manager', 'admin']);
     }
-} 
+}

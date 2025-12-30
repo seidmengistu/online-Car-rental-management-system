@@ -31,8 +31,8 @@
                             <i class="icon-23"></i>
                         </div>
                         <h4>Email Address</h4>
-                        <p><a href="mailto:info@carrental.com">info@carrental.com</a></p>
-                        <p><a href="mailto:support@carrental.com">support@carrental.com</a></p>
+                        <p><a href="mailto:info@zerihuncarrent.com">info@zerihuncarrent.com</a></p>
+                        <p><a href="mailto:support@zerihuncarrent.com">support@zerihuncarrent.com</a></p>
                     </div>
                 </div>
             </div>
@@ -43,8 +43,8 @@
                             <i class="icon-22"></i>
                         </div>
                         <h4>Phone Number</h4>
-                        <p><a href="tel:+251-911-123-456">+251-911-123-456</a></p>
-                        <p><a href="tel:+251-911-123-456">+251-911-123-456</a></p>
+                        <p><a href="tel:09-23-43-39-67">09-23-43-39-67</a></p>
+                        <p><a href="tel:09-23-43-39-67">09-23-43-39-67</a></p>
                     </div>
                 </div>
             </div>
@@ -55,7 +55,7 @@
                             <i class="icon-24"></i>
                         </div>
                         <h4>Office Address</h4>
-                        <p>57 Heold Insaf Station Road,<br>Cardiff, United Kingdom</p>
+                        <p>Medhanialem, Bole, Addis Ababa, Ethiopia</p>
                     </div>
                 </div>
             </div>
@@ -116,7 +116,7 @@
 <section class="map-section">
     <div class="container-fluid p-0">
         <div class="google-map-area">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2484.6701389278105!2d-3.1812908!3d51.4813325!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x486e1cb8742c46f5%3A0xc620b871e5d19ede!2sCardiff%20Central%20Station!5e0!3m2!1sen!2suk!4v1656276812345!5m2!1sen!2suk" width="100%" height="500" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3940.74213543301!2d38.78298227487727!3d8.99585898950712!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x164b85a9ecb1407d%3A0x45804c012efea6de!2zRVRISU8gWkVSSUhVTiBDQVIgUkVOVEFMIEFERElTIEFCQUJBfEVUSElPUElBfOGLqOGImOGKquGKkyDhiqrhiKvhi618Y2FyIHJlbnR8cGhvbmUgbnVtYmVyfEx1eHVyeXxjYXI!5e0!3m2!1sen!2sit!4v1767100231093!5m2!1sen!2sit" width="100%" height="500" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
     </div>
 </section>
