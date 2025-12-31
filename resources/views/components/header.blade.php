@@ -4,7 +4,8 @@
         <div class="preloader-close" style="display: none;">x</div>
         <div id="handle-preloader" class="handle-preloader" style="background: transparent !important;">
             <div class="animation-preloader">
-                <div class="spinner" style="border-color: #d4a853 !important; border-top-color: transparent !important;"></div>
+                <div class="spinner"
+                    style="border-color: #d4a853 !important; border-top-color: transparent !important;"></div>
             </div>
         </div>
     </div>
@@ -15,6 +16,7 @@
     .handle-preloader {
         background: transparent !important;
     }
+
     .spinner {
         border: 4px solid #d4a853 !important;
         border-top-color: transparent !important;
@@ -23,7 +25,8 @@
     /* Constrain logo height to prevent tall headers */
     .main_header_logo img,
     .sticky_header .main_header_logo img {
-        height: 64px;      /* slightly larger for visibility */
+        height: 64px;
+        /* slightly larger for visibility */
         max-height: 64px;
         width: auto;
         object-fit: contain;
@@ -37,7 +40,8 @@
     <div class="popup-inner">
         <div class="container">
             <div class="upper-box">
-                <figure class="logo-box"><a href="{{ route('home') }}"><img src="{{ asset('assets/images/logo.png') }}" alt=""></a></figure>
+                <figure class="logo-box"><a href="{{ route('home') }}"><img src="{{ asset('assets/images/logo.png') }}"
+                            alt=""></a></figure>
                 <div class="close-search"><span class="fa-solid fa-xmark"></span></div>
             </div>
         </div>
@@ -72,7 +76,8 @@
             <div class="main_header_inner">
                 <div class="main_header_logo">
                     <figure>
-                        <a href="{{ route('home') }}"><img src="{{ asset('assets/images/logo-light.png') }}" alt="Company Logo"></a>
+                        <a href="{{ route('home') }}"><img src="{{ asset('assets/images/logo-light.png') }}"
+                                alt="Company Logo"></a>
                     </figure>
                 </div>
                 <div class="main_header_menu menu_area">
@@ -86,22 +91,28 @@
                     <nav class="main-menu">
                         <div class="collapse navbar-collapse show" id="navbarSupportedContent">
                             <ul class="navigation">
-                                <li class="{{ Request::routeIs('home') ? 'active' : '' }}"><a href="{{ route('home') }}">Home</a>
+                                <li class="{{ Request::routeIs('home') ? 'active' : '' }}"><a
+                                        href="{{ route('home') }}">Home</a>
                                 <li class="dropdown">Cars
                                     <ul>
-                                        <li><a href="{{ Request::routeIs('home') ? '#car-collection' : route('home') }}">Car Collection</a></li>
-                                        <li><a href="{{ Request::routeIs('home') ? '#available-cars' : route('home') }}">Available Cars</a></li>
+                                        <li><a
+                                                href="{{ Request::routeIs('home') ? '#car-collection' : route('home') }}">Car
+                                                Collection</a></li>
+                                        <li><a
+                                                href="{{ Request::routeIs('home') ? '#available-cars' : route('home') }}">Available
+                                                Cars</a></li>
                                     </ul>
                                 </li>
-                                <li class="dropdown"><a href="#">Pages</a>
+                                {{-- <li class="dropdown"><a href="#">Pages</a>
                                     <ul>
                                         <li><a href="{{ route('about') }}">About Us</a></li>
                                         <li><a href="{{ route('faq') }}">Faq</a></li>
                                         <li><a href="{{ route('gallery') }}">Gallery</a></li>
                                         <li><a href="{{ route('blog') }}">Blog</a></li>
                                     </ul>
-                                </li>                               
-                                <li class="{{ Request::routeIs('contact') ? 'active' : '' }}"><a href="{{ route('contact') }}">Contact</a></li>
+                                </li> --}}
+                                <li class="{{ Request::routeIs('contact') ? 'active' : '' }}"><a
+                                        href="{{ route('contact') }}">Contact</a></li>
                             </ul>
                         </div>
                     </nav>
@@ -139,22 +150,26 @@
                         @auth
                             <!-- Logged in user dropdown -->
                             <div class="dropdown">
-                                <a href="#" class="btn-style-one dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                <a href="#" class="btn-style-one dropdown-toggle" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
                                     <i class="fas fa-user me-1"></i>{{ Auth::user()->name }}
                                 </a>
                                 <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="{{ Auth::user()->isAdmin() ? route('admin.dashboard') : route('dashboard') }}">
-                                        <i class="fas fa-tachometer-alt me-2"></i>Dashboard
-                                    </a></li>
+                                    <li><a class="dropdown-item"
+                                            href="{{ Auth::user()->isAdmin() ? route('admin.dashboard') : route('dashboard') }}">
+                                            <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                                        </a></li>
                                     <li><a class="dropdown-item" href="{{ route('profile') }}">
-                                        <i class="fas fa-user-edit me-2"></i>Profile
-                                    </a></li>
+                                            <i class="fas fa-user-edit me-2"></i>Profile
+                                        </a></li>
                                     @if(Auth::user()->isStaff() || Auth::user()->isManager())
-                                    <li><a class="dropdown-item" href="{{ route('admin.dashboard') }}">
-                                        <i class="fas fa-cog me-2"></i>Admin Panel
-                                    </a></li>
+                                        <li><a class="dropdown-item" href="{{ route('admin.dashboard') }}">
+                                                <i class="fas fa-cog me-2"></i>Admin Panel
+                                            </a></li>
                                     @endif
-                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
                                     <li>
                                         <form method="POST" action="{{ route('logout') }}" class="d-inline">
                                             @csrf
@@ -168,16 +183,17 @@
                         @else
                             <!-- Guest user dropdown -->
                             <div class="dropdown">
-                                <a href="#" class="btn-style-one dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                <a href="#" class="btn-style-one dropdown-toggle" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
                                     <i class="fas fa-user me-1"></i>Account
                                 </a>
                                 <ul class="dropdown-menu">
                                     <li><a class="dropdown-item" href="{{ route('login') }}">
-                                        <i class="fas fa-sign-in-alt me-2"></i>Login
-                                    </a></li>
+                                            <i class="fas fa-sign-in-alt me-2"></i>Login
+                                        </a></li>
                                     <li><a class="dropdown-item" href="{{ route('register') }}">
-                                        <i class="fas fa-user-plus me-2"></i>Register
-                                    </a></li>
+                                            <i class="fas fa-user-plus me-2"></i>Register
+                                        </a></li>
                                 </ul>
                             </div>
                         @endauth
@@ -194,7 +210,8 @@
             <div class="main_header_inner">
                 <div class="main_header_logo">
                     <figure>
-                        <a href="{{ route('home') }}"><img src="{{ asset('assets/images/logo-light.png') }}" alt="Company Logo"></a>
+                        <a href="{{ route('home') }}"><img src="{{ asset('assets/images/logo-light.png') }}"
+                                alt="Company Logo"></a>
                     </figure>
                 </div>
                 <div class="main_header_menu menu_area">
@@ -208,22 +225,26 @@
                         @auth
                             <!-- Logged in user dropdown -->
                             <div class="dropdown">
-                                <a href="#" class="btn-style-one dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                <a href="#" class="btn-style-one dropdown-toggle" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
                                     <i class="fas fa-user me-1"></i>{{ Auth::user()->name }}
                                 </a>
                                 <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="{{ Auth::user()->isAdmin() ? route('admin.dashboard') : route('dashboard') }}">
-                                        <i class="fas fa-tachometer-alt me-2"></i>Dashboard
-                                    </a></li>
+                                    <li><a class="dropdown-item"
+                                            href="{{ Auth::user()->isAdmin() ? route('admin.dashboard') : route('dashboard') }}">
+                                            <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                                        </a></li>
                                     <li><a class="dropdown-item" href="{{ route('profile') }}">
-                                        <i class="fas fa-user-edit me-2"></i>Profile
-                                    </a></li>
+                                            <i class="fas fa-user-edit me-2"></i>Profile
+                                        </a></li>
                                     @if(Auth::user()->isStaff() || Auth::user()->isManager())
-                                    <li><a class="dropdown-item" href="{{ route('admin.dashboard') }}">
-                                        <i class="fas fa-cog me-2"></i>Admin Panel
-                                    </a></li>
+                                        <li><a class="dropdown-item" href="{{ route('admin.dashboard') }}">
+                                                <i class="fas fa-cog me-2"></i>Admin Panel
+                                            </a></li>
                                     @endif
-                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
                                     <li>
                                         <form method="POST" action="{{ route('logout') }}" class="d-inline">
                                             @csrf
@@ -237,16 +258,17 @@
                         @else
                             <!-- Guest user dropdown -->
                             <div class="dropdown">
-                                <a href="#" class="btn-style-one dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                <a href="#" class="btn-style-one dropdown-toggle" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
                                     <i class="fas fa-user me-1"></i>Account
                                 </a>
                                 <ul class="dropdown-menu">
                                     <li><a class="dropdown-item" href="{{ route('login') }}">
-                                        <i class="fas fa-sign-in-alt me-2"></i>Login
-                                    </a></li>
+                                            <i class="fas fa-sign-in-alt me-2"></i>Login
+                                        </a></li>
                                     <li><a class="dropdown-item" href="{{ route('register') }}">
-                                        <i class="fas fa-user-plus me-2"></i>Register
-                                    </a></li>
+                                            <i class="fas fa-user-plus me-2"></i>Register
+                                        </a></li>
                                 </ul>
                             </div>
                         @endauth
@@ -262,26 +284,32 @@
         <div class="menu-backdrop"></div>
         <div class="close-btn">X</div>
         <nav class="menu-box">
-            <div class="nav-logo"><a href="{{ route('home') }}"><img src="{{ asset('assets/images/mobile-logo.png') }}" alt="" title=""></a></div>
+            <div class="nav-logo"><a href="{{ route('home') }}"><img src="{{ asset('assets/images/mobile-logo.png') }}"
+                        alt="" title=""></a></div>
             <div class="menu-outer">
                 <!-- Mobile Navigation Menu -->
                 <ul class="navigation clearfix">
-                    <li class="{{ Request::routeIs('home') ? 'active' : '' }}"><a href="{{ route('home') }}">Home</a></li>
+                    <li class="{{ Request::routeIs('home') ? 'active' : '' }}"><a href="{{ route('home') }}">Home</a>
+                    </li>
                     <li class="dropdown"><a href="#">Cars</a>
                         <ul>
-                            <li><a href="{{ Request::routeIs('home') ? '#car-collection' : route('cars.index') }}">Car Collection</a></li>
-                            <li><a href="{{ Request::routeIs('home') ? '#available-cars' : route('cars.index', ['available' => 'true']) }}">Available Cars</a></li>
+                            <li><a href="{{ Request::routeIs('home') ? '#car-collection' : route('cars.index') }}">Car
+                                    Collection</a></li>
+                            <li><a
+                                    href="{{ Request::routeIs('home') ? '#available-cars' : route('cars.index', ['available' => 'true']) }}">Available
+                                    Cars</a></li>
                         </ul>
                     </li>
-                    <li class="dropdown"><a href="#">Pages</a>
+                    {{-- <li class="dropdown"><a href="#">Pages</a>
                         <ul>
                             <li><a href="{{ route('about') }}">About Us</a></li>
                             <li><a href="{{ route('faq') }}">Faq</a></li>
                             <li><a href="{{ route('gallery') }}">Gallery</a></li>
                             <li><a href="{{ route('blog') }}">Blog</a></li>
                         </ul>
-                    </li>
-                    <li class="{{ Request::routeIs('contact') ? 'active' : '' }}"><a href="{{ route('contact') }}">Contact</a></li>
+                    </li> --}}
+                    <li class="{{ Request::routeIs('contact') ? 'active' : '' }}"><a
+                            href="{{ route('contact') }}">Contact</a></li>
                 </ul>
             </div>
             <div class="contact-info">
@@ -303,4 +331,4 @@
     <!-- End Mobile Menu -->
 
 </header>
-<!-- End Main Header --> 
+<!-- End Main Header -->
