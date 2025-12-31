@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8" />
   <title>EthioRental | Register</title>
@@ -7,12 +8,13 @@
   <meta name="title" content="EthioRental | Register" />
   <meta name="author" content="EthioRental" />
   <meta name="description" content="Register for EthioRental system" />
-  
+
   <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-  
+
   <style>
     :root {
       --bg-primary: #0a0a1a;
@@ -70,15 +72,24 @@
     }
 
     @keyframes float-glow {
-      0%, 100% { transform: scale(1) translate(0, 0); opacity: 0.5; }
-      50% { transform: scale(1.2) translate(30px, -30px); opacity: 0.8; }
+
+      0%,
+      100% {
+        transform: scale(1) translate(0, 0);
+        opacity: 0.5;
+      }
+
+      50% {
+        transform: scale(1.2) translate(30px, -30px);
+        opacity: 0.8;
+      }
     }
 
     /* Particles */
     .particles {
       position: fixed;
       inset: 0;
-      background-image: 
+      background-image:
         radial-gradient(2px 2px at 20px 30px, rgba(212, 168, 83, 0.3), transparent),
         radial-gradient(2px 2px at 40px 70px, rgba(255, 255, 255, 0.2), transparent),
         radial-gradient(2px 2px at 50px 160px, rgba(157, 78, 221, 0.3), transparent),
@@ -92,8 +103,13 @@
     }
 
     @keyframes sparkle {
-      0% { transform: translateY(0); }
-      100% { transform: translateY(-200px); }
+      0% {
+        transform: translateY(0);
+      }
+
+      100% {
+        transform: translateY(-200px);
+      }
     }
 
     .register-container {
@@ -106,8 +122,15 @@
     }
 
     @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     /* Logo Section */
@@ -144,7 +167,7 @@
       border: 1px solid var(--glass-border);
       border-radius: 24px;
       padding: 2.5rem;
-      box-shadow: 
+      box-shadow:
         0 25px 50px rgba(0, 0, 0, 0.3),
         inset 0 1px 0 rgba(255, 255, 255, 0.05);
     }
@@ -351,6 +374,7 @@
     }
 
     @media (max-width: 600px) {
+
       .form-row,
       .form-row-3 {
         grid-template-columns: 1fr;
@@ -527,9 +551,10 @@
     }
   </style>
 </head>
+
 <body>
   <div class="particles"></div>
-  
+
   <div class="register-container">
     <div class="logo-section">
       <h1><span>Ethio</span> Car Rental</h1>
@@ -551,9 +576,9 @@
         </div>
       @endif
 
-      <form method="POST" action="{{ route('register') }}">
+      <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data">
         @csrf
-        
+
         <!-- Personal Information -->
         <div class="section-title">
           <i class="bi bi-person-circle"></i>
@@ -564,8 +589,8 @@
           <div class="form-group">
             <label class="form-label">Full Name <span class="required">*</span></label>
             <div class="input-wrapper">
-              <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" 
-                     placeholder="Enter your full name" value="{{ old('name') }}" required />
+              <input type="text" name="name" class="form-control @error('name') is-invalid @enderror"
+                placeholder="Enter your full name" value="{{ old('name') }}" required />
               <i class="bi bi-person"></i>
             </div>
             @error('name')
@@ -576,8 +601,8 @@
           <div class="form-group">
             <label class="form-label">Email Address <span class="required">*</span></label>
             <div class="input-wrapper">
-              <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" 
-                     placeholder="Enter your email" value="{{ old('email') }}" required />
+              <input type="email" name="email" class="form-control @error('email') is-invalid @enderror"
+                placeholder="Enter your email" value="{{ old('email') }}" required />
               <i class="bi bi-envelope"></i>
             </div>
             @error('email')
@@ -590,8 +615,8 @@
           <div class="form-group">
             <label class="form-label">Phone Number <span class="required">*</span></label>
             <div class="input-wrapper">
-              <input type="tel" name="phone" class="form-control @error('phone') is-invalid @enderror" 
-                     placeholder="Enter phone number" value="{{ old('phone') }}" required />
+              <input type="tel" name="phone" class="form-control @error('phone') is-invalid @enderror"
+                placeholder="Enter phone number" value="{{ old('phone') }}" required />
               <i class="bi bi-telephone"></i>
             </div>
             @error('phone')
@@ -599,17 +624,6 @@
             @enderror
           </div>
 
-          <div class="form-group">
-            <label class="form-label">Date of Birth <span class="required">*</span></label>
-            <div class="input-wrapper">
-              <input type="date" name="date_of_birth" class="form-control @error('date_of_birth') is-invalid @enderror" 
-                     value="{{ old('date_of_birth') }}" required />
-              <i class="bi bi-calendar"></i>
-            </div>
-            @error('date_of_birth')
-              <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
-          </div>
         </div>
 
         <!-- Address Information -->
@@ -618,24 +632,12 @@
           <h3>Address Information</h3>
         </div>
 
-        <div class="form-group">
-          <label class="form-label">Street Address <span class="required">*</span></label>
-          <div class="input-wrapper">
-            <input type="text" name="address" class="form-control @error('address') is-invalid @enderror" 
-                   placeholder="Enter your street address" value="{{ old('address') }}" required />
-            <i class="bi bi-house"></i>
-          </div>
-          @error('address')
-            <div class="invalid-feedback">{{ $message }}</div>
-          @enderror
-        </div>
-
         <div class="form-row">
           <div class="form-group">
             <label class="form-label">City <span class="required">*</span></label>
             <div class="input-wrapper">
-              <input type="text" name="city" class="form-control @error('city') is-invalid @enderror" 
-                     placeholder="Enter city" value="{{ old('city') }}" required />
+              <input type="text" name="city" class="form-control @error('city') is-invalid @enderror"
+                placeholder="Enter city" value="{{ old('city') }}" required />
               <i class="bi bi-building"></i>
             </div>
             @error('city')
@@ -646,8 +648,8 @@
           <div class="form-group">
             <label class="form-label">State/Region <span class="required">*</span></label>
             <div class="input-wrapper">
-              <input type="text" name="state" class="form-control @error('state') is-invalid @enderror" 
-                     placeholder="Enter state/region" value="{{ old('state') }}" required />
+              <input type="text" name="state" class="form-control @error('state') is-invalid @enderror"
+                placeholder="Enter state/region" value="{{ old('state') }}" required />
               <i class="bi bi-map"></i>
             </div>
             @error('state')
@@ -656,129 +658,189 @@
           </div>
         </div>
 
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">Zip/Postal Code <span class="required">*</span></label>
-            <div class="input-wrapper">
-              <input type="text" name="zip_code" class="form-control @error('zip_code') is-invalid @enderror" 
-                     placeholder="Enter zip code" value="{{ old('zip_code') }}" required />
-              <i class="bi bi-mailbox"></i>
-            </div>
-            @error('zip_code')
-              <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
+        <div class="form-group">
+          <label class="form-label">Country <span class="required">*</span></label>
+          <div class="input-wrapper">
+            <input type="text" name="country" class="form-control @error('country') is-invalid @enderror"
+              placeholder="Enter country" value="{{ old('country', 'Ethiopia') }}" required />
+            <i class="bi bi-globe"></i>
           </div>
-
-          <div class="form-group">
-            <label class="form-label">Country <span class="required">*</span></label>
-            <div class="input-wrapper">
-              <input type="text" name="country" class="form-control @error('country') is-invalid @enderror" 
-                     placeholder="Enter country" value="{{ old('country', 'Ethiopia') }}" required />
-              <i class="bi bi-globe"></i>
-            </div>
-            @error('country')
-              <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
-          </div>
+          @error('country')
+            <div class="invalid-feedback">{{ $message }}</div>
+          @enderror
         </div>
+    </div>
 
-        <!-- Driving License Information -->
-        <div class="section-title">
-          <i class="bi bi-card-text"></i>
-          <h3>Driving License Information</h3>
+    <!-- Driving License Information -->
+    <div class="section-title">
+      <i class="bi bi-card-text"></i>
+      <h3>Identification & License</h3>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">ID Document (Passport / National ID) <span class="required">*</span></label>
+      <div class="input-wrapper">
+        <input type="file" name="id_document" class="form-control @error('id_document') is-invalid @enderror"
+          accept=".jpg,.jpeg,.png,.pdf" required />
+        <i class="bi bi-file-earmark-person"></i>
+      </div>
+      <p class="form-hint"><i class="bi bi-info-circle"></i>Max 2MB. Format: JPG, PNG, PDF</p>
+      @error('id_document')
+        <div class="invalid-feedback">{{ $message }}</div>
+      @enderror
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">License Number</label>
+        <div class="input-wrapper">
+          <input type="text" name="driving_license_number"
+            class="form-control @error('driving_license_number') is-invalid @enderror"
+            placeholder="Enter license number" value="{{ old('driving_license_number') }}" />
+          <i class="bi bi-credit-card"></i>
         </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">License Number <span class="required">*</span></label>
-            <div class="input-wrapper">
-              <input type="text" name="driving_license_number" class="form-control @error('driving_license_number') is-invalid @enderror" 
-                     placeholder="Enter license number" value="{{ old('driving_license_number') }}" required />
-              <i class="bi bi-credit-card"></i>
-            </div>
-            @error('driving_license_number')
-              <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
-          </div>
-
-          <div class="form-group">
-            <label class="form-label">License Expiry Date <span class="required">*</span></label>
-            <div class="input-wrapper">
-              <input type="date" name="driving_license_expiry" class="form-control @error('driving_license_expiry') is-invalid @enderror" 
-                     value="{{ old('driving_license_expiry') }}" required />
-              <i class="bi bi-calendar-check"></i>
-            </div>
-            <p class="form-hint"><i class="bi bi-info-circle"></i>Must be a future date</p>
-            @error('driving_license_expiry')
-              <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
-          </div>
-        </div>
-
-        <!-- Account Security -->
-        <div class="section-title">
-          <i class="bi bi-shield-lock"></i>
-          <h3>Account Security</h3>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">Password <span class="required">*</span></label>
-            <div class="input-wrapper has-toggle">
-              <input type="password" name="password" id="password" class="form-control @error('password') is-invalid @enderror" 
-                     placeholder="Create password" required />
-              <i class="bi bi-lock input-icon"></i>
-              <button type="button" class="password-toggle" onclick="togglePassword('password', this)">
-                <i class="bi bi-eye"></i>
-              </button>
-            </div>
-            <p class="form-hint"><i class="bi bi-info-circle"></i>Minimum 8 characters</p>
-            @error('password')
-              <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
-          </div>
-
-          <div class="form-group">
-            <label class="form-label">Confirm Password <span class="required">*</span></label>
-            <div class="input-wrapper has-toggle">
-              <input type="password" name="password_confirmation" id="password_confirmation" class="form-control" 
-                     placeholder="Confirm password" required />
-              <i class="bi bi-lock-fill input-icon"></i>
-              <button type="button" class="password-toggle" onclick="togglePassword('password_confirmation', this)">
-                <i class="bi bi-eye"></i>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div class="form-check">
-          <input class="form-check-input" type="checkbox" name="terms" id="terms" required />
-          <label class="form-check-label" for="terms">
-            I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
-          </label>
-        </div>
-
-        <button type="submit" class="btn-submit">
-          <i class="bi bi-person-plus me-2"></i>Create Account
-        </button>
-      </form>
-
-      <div class="divider">
-        <span>or</span>
+        @error('driving_license_number')
+          <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
       </div>
 
-      <div class="auth-links">
-        <p style="color: var(--text-secondary); margin-bottom: 0.5rem;">Already have an account?</p>
-        <a href="{{ route('login') }}" class="login-link">
-          <i class="bi bi-box-arrow-in-right"></i>Sign In
-        </a>
+      <div class="form-group">
+        <label class="form-label">License Expiry Date</label>
+        <div class="input-wrapper">
+          <input type="date" name="driving_license_expiry"
+            class="form-control @error('driving_license_expiry') is-invalid @enderror"
+            value="{{ old('driving_license_expiry') }}" />
+          <i class="bi bi-calendar-check"></i>
+        </div>
+        <p class="form-hint"><i class="bi bi-info-circle"></i>Must be a future date</p>
+        @error('driving_license_expiry')
+          <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
       </div>
     </div>
 
-    <div class="back-home">
-      <a href="{{ route('home') }}">
-        <i class="bi bi-arrow-left"></i>Back to Home
+    <!-- Account Security -->
+    <div class="section-title">
+      <i class="bi bi-shield-lock"></i>
+      <h3>Account Security</h3>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Password <span class="required">*</span></label>
+        <div class="input-wrapper has-toggle">
+          <input type="password" name="password" id="password"
+            class="form-control @error('password') is-invalid @enderror" placeholder="Create password" required />
+          <i class="bi bi-lock input-icon"></i>
+          <button type="button" class="password-toggle" onclick="togglePassword('password', this)">
+            <i class="bi bi-eye"></i>
+          </button>
+        </div>
+        <p class="form-hint"><i class="bi bi-info-circle"></i>Minimum 8 characters</p>
+        @error('password')
+          <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Confirm Password <span class="required">*</span></label>
+        <div class="input-wrapper has-toggle">
+          <input type="password" name="password_confirmation" id="password_confirmation" class="form-control"
+            placeholder="Confirm password" required />
+          <i class="bi bi-lock-fill input-icon"></i>
+          <button type="button" class="password-toggle" onclick="togglePassword('password_confirmation', this)">
+            <i class="bi bi-eye"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" name="terms" id="terms" required />
+      <label class="form-check-label" for="terms">
+        I agree to the <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal">Terms of Service</a> and <a
+          href="#">Privacy Policy</a>
+      </label>
+    </div>
+
+    <button type="submit" class="btn-submit">
+      <i class="bi bi-person-plus me-2"></i>Create Account
+    </button>
+    </form>
+
+    <div class="divider">
+      <span>or</span>
+    </div>
+
+    <div class="auth-links">
+      <p style="color: var(--text-secondary); margin-bottom: 0.5rem;">Already have an account?</p>
+      <a href="{{ route('login') }}" class="login-link">
+        <i class="bi bi-box-arrow-in-right"></i>Sign In
       </a>
+    </div>
+  </div>
+
+  <div class="back-home">
+    <a href="{{ route('home') }}">
+      <i class="bi bi-arrow-left"></i>Back to Home
+    </a>
+  </div>
+  </div>
+
+  <!-- Terms of Service Modal -->
+  <div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="termsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg">
+      <div class="modal-content" style="background: #1a1a3e; color: #fff; border: 1px solid rgba(255,255,255,0.1);">
+        <div class="modal-header" style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+          <h5 class="modal-title" id="termsModalLabel" style="color: #d4a853;">Terms of Service</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <h6 style="color: #d4a853; margin-top: 1rem;">1. Acceptance of Terms</h6>
+          <p class="small text-white-50">By registering with EthioRental ("the Company"), you agree to comply with and
+            be bound by these Terms of Service. These terms apply to all vehicle rentals and services provided by the
+            Company within Ethiopia.</p>
+
+          <h6 style="color: #d4a853; margin-top: 1rem;">2. Rental Requirements</h6>
+          <p class="small text-white-50">To rent a vehicle, you must:</p>
+          <ul class="small text-white-50">
+            <li>Be at least 21 years of age.</li>
+            <li>Possess a valid driving license recognized in Ethiopia (local or international permit).</li>
+            <li>Provide a valid government-issued ID (National ID or Passport).</li>
+          </ul>
+
+          <h6 style="color: #d4a853; margin-top: 1rem;">3. Vehicle Use</h6>
+          <p class="small text-white-50">Vehicles must NOT be used for:</p>
+          <ul class="small text-white-50">
+            <li>Illegal activities under Ethiopian law.</li>
+            <li>Transporting passengers or goods for hire (unless authorized).</li>
+            <li>Off-road driving in unauthorized zones.</li>
+            <li>Driving under the influence of alcohol or drugs.</li>
+          </ul>
+
+          <h6 style="color: #d4a853; margin-top: 1rem;">4. Payment & Deposits</h6>
+          <p class="small text-white-50">All rental fees must be paid in advance. A refundable security deposit is
+            required for all rentals to cover potential damages or traffic fines incurred during the rental period.</p>
+
+          <h6 style="color: #d4a853; margin-top: 1rem;">5. Traffic Violations</h6>
+          <p class="small text-white-50">The renter is solely responsible for any traffic violations, parking fines, or
+            penalties incurred during the rental period in accordance with Ethiopian Traffic Regulations.</p>
+
+          <h6 style="color: #d4a853; margin-top: 1rem;">6. Insurance & Liability</h6>
+          <p class="small text-white-50">Our vehicles are covered by comprehensive insurance. However, the renter is
+            liable for the excess amount in case of damage or theft. Insurance does not cover damage caused by
+            negligence or violation of these terms.</p>
+
+          <h6 style="color: #d4a853; margin-top: 1rem;">7. Cancellation Policy</h6>
+          <p class="small text-white-50">Reservations cancelled less than 24 hours before pickup may be subject to a
+            cancellation fee equivalent to one day's rental.</p>
+        </div>
+        <div class="modal-footer" style="border-top: 1px solid rgba(255,255,255,0.1);">
+          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary btn-sm" data-bs-dismiss="modal"
+            style="background: #d4a853; border: none; color: #000;">I Understand</button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -788,7 +850,7 @@
     function togglePassword(inputId, button) {
       var input = document.getElementById(inputId);
       var icon = button.querySelector('i');
-      
+
       if (input.type === 'password') {
         input.type = 'text';
         icon.classList.remove('bi-eye');
@@ -801,4 +863,5 @@
     }
   </script>
 </body>
+
 </html>

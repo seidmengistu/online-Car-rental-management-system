@@ -55,12 +55,6 @@
                             @enderror
                         </div>
 
-                        <div class="col-md-6">
-                            <label for="date_of_birth" class="form-label-modern">Date of Birth</label>
-                            <input type="date" class="form-control-modern @error('date_of_birth') is-invalid @enderror" id="date_of_birth" name="date_of_birth" value="{{ old('date_of_birth', $user->date_of_birth ? $user->date_of_birth->format('Y-m-d') : '') }}">
-                            @error('date_of_birth')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
                         </div>
 
                         <div class="col-md-6">
@@ -102,13 +96,6 @@
                 </div>
                 <div class="modern-card-body">
                     <div class="row g-4">
-                        <div class="col-12">
-                            <label for="address" class="form-label-modern">Street Address <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control-modern @error('address') is-invalid @enderror" id="address" name="address" value="{{ old('address', $user->address) }}" required>
-                            @error('address')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
 
                         <div class="col-md-6">
                             <label for="city" class="form-label-modern">City <span class="text-danger">*</span></label>
@@ -126,12 +113,6 @@
                             @enderror
                         </div>
 
-                        <div class="col-md-6">
-                            <label for="zip_code" class="form-label-modern">ZIP/Postal Code <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control-modern @error('zip_code') is-invalid @enderror" id="zip_code" name="zip_code" value="{{ old('zip_code', $user->zip_code) }}" required>
-                            @error('zip_code')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
                         </div>
 
                         <div class="col-md-6">

@@ -14,8 +14,6 @@ class User extends Authenticatable
 
     /**
      * The attributes that are mass assignable.
-     *
-     * @var list<string>
      */
     protected $fillable = [
         'name',
@@ -23,15 +21,13 @@ class User extends Authenticatable
         'password',
         'role_id',
         'phone',
-        'address',
         'city',
         'state',
-        'zip_code',
         'country',
-        'date_of_birth',
         'driving_license_number',
         'driving_license_expiry',
         'is_active',
+        'id_document_path',
     ];
 
     /**
@@ -54,7 +50,6 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
-            'date_of_birth' => 'date',
             'driving_license_expiry' => 'date',
             'is_active' => 'boolean',
         ];
@@ -170,10 +165,8 @@ class User extends Authenticatable
     public function getFullAddressAttribute()
     {
         $parts = array_filter([
-            $this->address,
             $this->city,
             $this->state,
-            $this->zip_code,
             $this->country
         ]);
 

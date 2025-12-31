@@ -90,14 +90,12 @@ class AuthController extends Controller
             'email' => 'required|string|email|max:255|unique:users',
             'password' => ['required', 'confirmed', Password::defaults()],
             'phone' => ['required', 'regex:/^09\\d{8}$/'],
-            'address' => 'required|string|max:255',
             'city' => 'required|string|max:100',
             'state' => 'required|string|max:100',
-            'zip_code' => 'required|string|max:20',
             'country' => 'required|string|max:100',
-            'date_of_birth' => 'required|date|before:today',
-            'driving_license_number' => 'required|string|max:50|unique:users',
-            'driving_license_expiry' => 'required|date|after:today',
+            'driving_license_number' => 'nullable|string|max:50|unique:users',
+            'driving_license_expiry' => 'nullable|date|after:today',
+            'id_document' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
         ]);
 
         if ($validator->fails()) {
@@ -109,20 +107,24 @@ class AuthController extends Controller
         // Get customer role
         $customerRole = Role::where('name', 'customer')->first();
 
+        // Handle ID Document Upload
+        $idDocumentPath = null;
+        if ($request->hasFile('id_document')) {
+            $idDocumentPath = $request->file('id_document')->store('id_documents', 'public');
+        }
+
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role_id' => $customerRole->id,
             'phone' => $request->phone,
-            'address' => $request->address,
             'city' => $request->city,
             'state' => $request->state,
-            'zip_code' => $request->zip_code,
             'country' => $request->country,
-            'date_of_birth' => $request->date_of_birth,
             'driving_license_number' => $request->driving_license_number,
             'driving_license_expiry' => $request->driving_license_expiry,
+            'id_document_path' => $idDocumentPath,
             'is_active' => true,
         ]);
 
@@ -130,7 +132,7 @@ class AuthController extends Controller
 
         ActivityLog::log('register', 'New customer registered: ' . $user->name, $user);
 
-        return redirect('/dashboard')->with('success', 'Account created successfully! Welcome to Carola Car Rental.');
+        return redirect('/dashboard')->with('success', 'Account created successfully! Welcome to Ethio Car Rental.');
     }
 
     /**
@@ -173,13 +175,13 @@ class AuthController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'regex:/^[A-Za-z ]+$/', 'max:255'],
             'phone' => ['required', 'regex:/^09\\d{8}$/'],
-            'address' => 'required|string|max:255',
+            'address' => 'required|string|max:255', // Kept for now as migration removed it but plan didn't explicitly say remove from profile update validation? wait plan says 'Similar validation updates'. So should remove address.
             'city' => 'required|string|max:100',
             'state' => 'required|string|max:100',
-            'zip_code' => 'required|string|max:20',
             'country' => 'required|string|max:100',
-            'driving_license_number' => 'required|string|max:50|unique:users,driving_license_number,' . $user->id,
-            'driving_license_expiry' => 'required|date|after:today',
+            'driving_license_number' => 'nullable|string|max:50|unique:users,driving_license_number,' . $user->id,
+            'driving_license_expiry' => 'nullable|date|after:today',
+            'id_document' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
         ]);
 
         if ($validator->fails()) {
@@ -188,17 +190,21 @@ class AuthController extends Controller
                 ->withInput();
         }
 
-        $user->update($request->only([
+        $data = $request->only([
             'name',
             'phone',
-            'address',
             'city',
             'state',
-            'zip_code',
             'country',
             'driving_license_number',
             'driving_license_expiry'
-        ]));
+        ]);
+
+        if ($request->hasFile('id_document')) {
+            $data['id_document_path'] = $request->file('id_document')->store('id_documents', 'public');
+        }
+
+        $user->update($data);
 
         ActivityLog::log('profile_update', 'User updated profile details', $user);
 

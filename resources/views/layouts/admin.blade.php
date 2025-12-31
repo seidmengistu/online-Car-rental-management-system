@@ -1170,6 +1170,7 @@
               Returns
             </a>
           </li>
+          @if(Auth::user()->isManager())
           <li class="sidebar-nav-item">
             <a href="{{ route('admin.complaints.index') }}"
               class="sidebar-nav-link {{ request()->routeIs('admin.complaints.*') ? 'active' : '' }}">
@@ -1177,6 +1178,7 @@
               Complaints
             </a>
           </li>
+          @endif
           <li class="sidebar-nav-item">
             <a href="{{ route('admin.drivers.index') }}"
               class="sidebar-nav-link {{ request()->routeIs('admin.drivers.*') ? 'active' : '' }}">
@@ -1282,6 +1284,9 @@
               @endif
             </li>
             @forelse(Auth::user()->unreadNotifications->take(5) as $notification)
+              @if(!Auth::user()->isManager() && (str_contains($notification->type, 'Complaint')))
+                @continue
+              @endif
               <li>
                 <a class="dropdown-item p-3 border-bottom" href="{{ route('notifications.read', $notification->id) }}"
                   style="white-space: normal;">

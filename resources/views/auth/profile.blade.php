@@ -158,7 +158,7 @@
               </div>
             @endif
 
-            <form method="POST" action="{{ route('profile.update') }}">
+            <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data">
               @csrf
               @method('PUT')
 
@@ -181,13 +181,6 @@
                     value="{{ old('phone', $user->phone) }}" required>
                   @error('phone')<div class="invalid-feedback">{{ $message }}</div>@enderror
                 </div>
-                <div class="col-md-6">
-                  <label for="address" class="form-label">Street Address</label>
-                  <input type="text" id="address" name="address"
-                    class="form-control @error('address') is-invalid @enderror"
-                    value="{{ old('address', $user->address) }}" required>
-                  @error('address')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                </div>
                 <div class="col-md-4">
                   <label for="city" class="form-label">City</label>
                   <input type="text" id="city" name="city" class="form-control @error('city') is-invalid @enderror"
@@ -201,13 +194,6 @@
                   @error('state')<div class="invalid-feedback">{{ $message }}</div>@enderror
                 </div>
                 <div class="col-md-4">
-                  <label for="zip_code" class="form-label">ZIP Code</label>
-                  <input type="text" id="zip_code" name="zip_code"
-                    class="form-control @error('zip_code') is-invalid @enderror"
-                    value="{{ old('zip_code', $user->zip_code) }}" required>
-                  @error('zip_code')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                </div>
-                <div class="col-md-6">
                   <label for="country" class="form-label">Country</label>
                   <input type="text" id="country" name="country"
                     class="form-control @error('country') is-invalid @enderror"
@@ -215,25 +201,32 @@
                   @error('country')<div class="invalid-feedback">{{ $message }}</div>@enderror
                 </div>
                 <div class="col-md-6">
-                  <label for="date_of_birth" class="form-label">Date of Birth</label>
-                  <input type="date" id="date_of_birth" name="date_of_birth"
-                    class="form-control @error('date_of_birth') is-invalid @enderror"
-                    value="{{ old('date_of_birth', $user->date_of_birth) }}" required>
-                  @error('date_of_birth')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                </div>
-                <div class="col-md-6">
                   <label for="driving_license_number" class="form-label">Driving License Number</label>
                   <input type="text" id="driving_license_number" name="driving_license_number"
                     class="form-control @error('driving_license_number') is-invalid @enderror"
-                    value="{{ old('driving_license_number', $user->driving_license_number) }}" required>
+                    value="{{ old('driving_license_number', $user->driving_license_number) }}">
                   @error('driving_license_number')<div class="invalid-feedback">{{ $message }}</div>@enderror
                 </div>
                 <div class="col-md-6">
                   <label for="driving_license_expiry" class="form-label">License Expiry Date</label>
                   <input type="date" id="driving_license_expiry" name="driving_license_expiry"
                     class="form-control @error('driving_license_expiry') is-invalid @enderror"
-                    value="{{ old('driving_license_expiry', $user->driving_license_expiry) }}" required>
+                    value="{{ old('driving_license_expiry', $user->driving_license_expiry ? $user->driving_license_expiry->format('Y-m-d') : '') }}">
                   @error('driving_license_expiry')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                </div>
+                <div class="col-12">
+                   <label for="id_document" class="form-label">ID Document (Upload to update)</label>
+                   @if($user->id_document_path)
+                       <div class="mb-2">
+                           <a href="{{ asset('storage/' . $user->id_document_path) }}" target="_blank" class="text-primary">
+                               <i class="bi bi-file-earmark-person"></i> View Current ID
+                           </a>
+                       </div>
+                   @endif
+                   <input type="file" id="id_document" name="id_document" class="form-control @error('id_document') is-invalid @enderror" 
+                          accept=".jpg,.jpeg,.png,.pdf">
+                    <div class="form-text">Max 2MB. Format: JPG, PNG, PDF</div>
+                   @error('id_document')<div class="invalid-feedback">{{ $message }}</div>@enderror
                 </div>
               </div>
 
@@ -264,14 +257,14 @@
                 @error('current_password')<div class="invalid-feedback">{{ $message }}</div>@enderror
               </div>
               <div class="mb-3">
-                <label for="new_password" class="form-label">New Password</label>
-                <input type="password" id="new_password" name="new_password"
-                  class="form-control @error('new_password') is-invalid @enderror" required>
-                @error('new_password')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                <label for="password" class="form-label">New Password</label>
+                <input type="password" id="password" name="password"
+                  class="form-control @error('password') is-invalid @enderror" required>
+                @error('password')<div class="invalid-feedback">{{ $message }}</div>@enderror
               </div>
               <div class="mb-3">
-                <label for="new_password_confirmation" class="form-label">Confirm New Password</label>
-                <input type="password" id="new_password_confirmation" name="new_password_confirmation"
+                <label for="password_confirmation" class="form-label">Confirm New Password</label>
+                <input type="password" id="password_confirmation" name="password_confirmation"
                   class="form-control" required>
               </div>
               <div class="d-flex justify-content-end">
@@ -315,7 +308,7 @@
               <p class="mb-1 fw-semibold">Need help?</p>
               <p class="text-muted mb-2">Contact support if you notice unusual activity on your account.</p>
               <a href="mailto:support@carola.com" class="btn btn-outline-primary btn-sm">
-                <i class="bi bi-envelope me-1"></i>support@carola.com
+                <i class="bi bi-envelope me-1"></i>support@zerihuncarrental.com
               </a>
             </div>
           </div>

@@ -116,9 +116,11 @@
                                     <td>
                                         <div class="small">
                                             <div class="text-muted">{{ $reservation->start_date->format('M d') }} -
-                                                {{ $reservation->end_date->format('M d, Y') }}</div>
+                                                {{ $reservation->end_date->format('M d, Y') }}
+                                            </div>
                                             <div class="fw-semibold">
-                                                {{ $reservation->start_date->diffInDays($reservation->end_date) + 1 }} days</div>
+                                                {{ $reservation->start_date->diffInDays($reservation->end_date) + 1 }} days
+                                            </div>
                                         </div>
                                     </td>
                                     <td>
@@ -126,10 +128,10 @@
                                     </td>
                                     <td>
                                         <span class="modern-badge modern-badge-{{ 
-                                            $reservation->status == 'confirmed' ? 'success' :
+                                                                                                            $reservation->status == 'confirmed' ? 'success' :
                         ($reservation->status == 'pending' ? 'warning' :
                             ($reservation->status == 'cancelled' ? 'danger' : 'secondary')) 
-                                        }}">
+                                                                                                        }}">
                                             {{ ucfirst($reservation->status) }}
                                         </span>
                                     </td>
@@ -149,11 +151,11 @@
 
                                         @if($reservation->payment_reference && $reservation->payment_status !== 'paid')
                                             <div class="d-flex gap-1 mt-2">
-                                                <a href="{{ route('reservations.receipt', $reservation) }}" target="_blank"
-                                                    class="btn-icon btn-icon-primary" style="width: 28px; height: 28px;"
-                                                    title="View Receipt">
-                                                    <i class="bi bi-receipt" style="font-size: 12px;"></i>
-                                                </a>
+                                                <!-- <a href="{{ route('reservations.receipt', $reservation) }}" target="_blank"
+                                                                                            class="btn-icon btn-icon-primary" style="width: 28px; height: 28px;"
+                                                                                            title="View Receipt">
+                                                                                            <i class="bi bi-receipt" style="font-size: 12px;"></i>
+                                                                                        </a> -->
                                                 <form action="{{ route('admin.reservations.payments.approve', $reservation) }}"
                                                     method="POST">
                                                     @csrf

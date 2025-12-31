@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8" />
   <title>EthioRental | Login</title>
@@ -7,12 +8,13 @@
   <meta name="title" content="EthioRental | Login" />
   <meta name="author" content="EthioRental" />
   <meta name="description" content="Login to EthioRental system" />
-  
+
   <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-  
+
   <style>
     :root {
       --bg-primary: #0a0a1a;
@@ -72,15 +74,24 @@
     }
 
     @keyframes float-glow {
-      0%, 100% { transform: scale(1) translate(0, 0); opacity: 0.5; }
-      50% { transform: scale(1.2) translate(30px, -30px); opacity: 0.8; }
+
+      0%,
+      100% {
+        transform: scale(1) translate(0, 0);
+        opacity: 0.5;
+      }
+
+      50% {
+        transform: scale(1.2) translate(30px, -30px);
+        opacity: 0.8;
+      }
     }
 
     /* Particles */
     .particles {
       position: fixed;
       inset: 0;
-      background-image: 
+      background-image:
         radial-gradient(2px 2px at 20px 30px, rgba(212, 168, 83, 0.3), transparent),
         radial-gradient(2px 2px at 40px 70px, rgba(255, 255, 255, 0.2), transparent),
         radial-gradient(2px 2px at 50px 160px, rgba(157, 78, 221, 0.3), transparent),
@@ -94,8 +105,13 @@
     }
 
     @keyframes sparkle {
-      0% { transform: translateY(0); }
-      100% { transform: translateY(-200px); }
+      0% {
+        transform: translateY(0);
+      }
+
+      100% {
+        transform: translateY(-200px);
+      }
     }
 
     .login-container {
@@ -107,8 +123,15 @@
     }
 
     @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     /* Logo Section */
@@ -145,7 +168,7 @@
       border: 1px solid var(--glass-border);
       border-radius: 24px;
       padding: 2.5rem;
-      box-shadow: 
+      box-shadow:
         0 25px 50px rgba(0, 0, 0, 0.3),
         inset 0 1px 0 rgba(255, 255, 255, 0.05);
     }
@@ -232,8 +255,8 @@
       box-shadow: 0 0 0 3px rgba(212, 168, 83, 0.1);
     }
 
-    .form-control:focus + i,
-    .form-control:focus ~ i {
+    .form-control:focus+i,
+    .form-control:focus~i {
       color: var(--accent-gold);
     }
 
@@ -465,9 +488,10 @@
     }
   </style>
 </head>
+
 <body>
   <div class="particles"></div>
-  
+
   <div class="login-container">
     <div class="logo-section">
       <h1><span>Ethio</span> Car Rental</h1>
@@ -491,12 +515,12 @@
 
       <form method="POST" action="{{ route('login') }}">
         @csrf
-        
+
         <div class="form-group">
           <label class="form-label">Email Address</label>
           <div class="input-wrapper">
-            <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" 
-                   placeholder="Enter your email" value="{{ old('email') }}" required autofocus />
+            <input type="email" name="email" class="form-control @error('email') is-invalid @enderror"
+              placeholder="Enter your email" value="{{ old('email') }}" required autofocus />
             <i class="bi bi-envelope input-icon"></i>
           </div>
           @error('email')
@@ -507,8 +531,8 @@
         <div class="form-group">
           <label class="form-label">Password</label>
           <div class="input-wrapper has-toggle">
-            <input type="password" name="password" id="password" class="form-control @error('password') is-invalid @enderror" 
-                   placeholder="Enter your password" required />
+            <input type="password" name="password" id="password"
+              class="form-control @error('password') is-invalid @enderror" placeholder="Enter your password" required />
             <i class="bi bi-lock input-icon"></i>
             <button type="button" class="password-toggle" onclick="togglePassword('password', this)">
               <i class="bi bi-eye"></i>
@@ -519,12 +543,12 @@
           @enderror
         </div>
 
-        <div class="form-options">
+        <!-- <div class="form-options">
           <div class="form-check">
             <input class="form-check-input" type="checkbox" name="remember" id="remember" />
             <label class="form-check-label" for="remember">Remember me</label>
           </div>
-        </div>
+        </div> -->
 
         <button type="submit" class="btn-submit">
           <i class="bi bi-box-arrow-in-right me-2"></i>Sign In
@@ -556,7 +580,7 @@
     function togglePassword(inputId, button) {
       var input = document.getElementById(inputId);
       var icon = button.querySelector('i');
-      
+
       if (input.type === 'password') {
         input.type = 'text';
         icon.classList.remove('bi-eye');
@@ -569,4 +593,5 @@
     }
   </script>
 </body>
+
 </html>

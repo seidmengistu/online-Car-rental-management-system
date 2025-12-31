@@ -196,7 +196,7 @@
                                 <div class="cost-block">
                                     <label>Daily rate</label>
                                                     <div class="input-group">
-                                                            <span class="input-group-text">$</span>
+                                                            <span class="input-group-text">Br</span>
                                                         <input type="text" class="form-control" id="daily_rate_display" readonly>
                                                     </div>
                                                 </div>
@@ -207,7 +207,7 @@
                                 <div class="cost-block">
                                     <label>Total amount</label>
                                                     <div class="input-group">
-                                                            <span class="input-group-text">$</span>
+                                                            <span class="input-group-text">Br</span>
                                                         <input type="text" class="form-control" id="total_amount_display" readonly>
                                     </div>
                                 </div>
