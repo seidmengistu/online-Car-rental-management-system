@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
-use App\Models\User;
 use App\Models\Role;
+use App\Models\User;
+use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
@@ -29,10 +29,8 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('password'),
             'role_id' => $managerRole->id,
             'phone' => '+1234567890',
-            'address' => '123 Manager St',
             'city' => 'New York',
             'state' => 'NY',
-            'zip_code' => '10001',
             'country' => 'USA',
             'is_active' => true,
         ]);
@@ -44,10 +42,8 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('password'),
             'role_id' => $staffRole->id,
             'phone' => '+1234567891',
-            'address' => '456 Staff Ave',
             'city' => 'New York',
             'state' => 'NY',
-            'zip_code' => '10002',
             'country' => 'USA',
             'is_active' => true,
         ]);
@@ -59,14 +55,11 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('password'),
             'role_id' => $customerRole->id,
             'phone' => '+1234567892',
-            'address' => '789 Customer Blvd',
             'city' => 'New York',
             'state' => 'NY',
-            'zip_code' => '10003',
             'country' => 'USA',
-            'date_of_birth' => '1990-01-01',
             'driving_license_number' => 'DL123456789',
-            'driving_license_expiry' => '2025-12-31',
+            'driving_license_expiry' => now()->addYears(2)->toDateString(),
             'is_active' => true,
         ]);
 

@@ -2,6 +2,16 @@
 
 A Laravel application for managing the complete car-rental lifecycle: browsing vehicles, making reservations, processing payments, converting approved reservations into rentals, assigning drivers, handling returns and overdue charges, and administering the platform through role-based dashboards.
 
+## Application preview
+
+| Customer landing page | Vehicle catalogue |
+| --- | --- |
+| ![Car rental landing page](docs/screenshots/home.png) | ![Customer vehicle catalogue](docs/screenshots/cars.png) |
+
+| Administration dashboard | Fleet management |
+| --- | --- |
+| ![Administration dashboard](docs/screenshots/admin-dashboard.png) | ![Fleet management interface](docs/screenshots/vehicle-management.png) |
+
 ## What it demonstrates
 
 - Domain-driven Laravel application with controllers, models, policies, services, notifications, and migrations
